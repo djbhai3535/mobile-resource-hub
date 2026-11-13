@@ -1,0 +1,422 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* ==========================================================================
+   Design Tokens & CSS Variables
+   ========================================================================== */
+:root {
+  /* Light Theme Palette (Default) */
+  --bg-app: #F5F7FB;
+  --surface: #FFFFFF;
+  --surface-secondary: #F8FAFC;
+  --surface-glass: rgba(255, 255, 255, 0.82);
+  --surface-glass-border: rgba(226, 232, 240, 0.85);
+  --glass-header-bg: rgba(255, 255, 255, 0.85);
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-rgb: 37, 99, 235;
+  --primary-subtle: #EFF6FF;
+  --text-main: #172033;
+  --text-muted: #64748B;
+  --border-subtle: #E2E8F0;
+  --secondary: #475569;
+  --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+  --card-hover-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.12);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+  --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  --badge-bg: #EEF2F6;
+  --badge-text: #334155;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --font-main: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+[data-bs-theme="dark"] {
+  /* Dark Theme Palette */
+  --bg-app: #0B1220;
+  --surface: #141E30;
+  --surface-secondary: #1A263D;
+  --surface-glass: rgba(20, 30, 48, 0.85);
+  --surface-glass-border: rgba(38, 52, 73, 0.85);
+  --glass-header-bg: rgba(11, 18, 32, 0.88);
+  --primary: #60A5FA;
+  --primary-hover: #93C5FD;
+  --primary-rgb: 96, 165, 250;
+  --primary-subtle: rgba(96, 165, 250, 0.12);
+  --text-main: #E5EDF8;
+  --text-muted: #94A3B8;
+  --border-subtle: #263449;
+  --secondary: #A8B5C7;
+  --card-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
+  --card-hover-shadow: 0 14px 32px -4px rgba(0, 0, 0, 0.65);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --focus-ring: 0 0 0 3px rgba(96, 165, 250, 0.35);
+  --badge-bg: #1E293B;
+  --badge-text: #CBD5E1;
+}
+
+/* ==========================================================================
+   Global Base & Typography
+   ========================================================================== */
+html, body {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   Glassmorphism Navigation & Header
+   ========================================================================== */
+.glass-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1040;
+  padding: 0.75rem 0;
+  transition: all 0.3s ease;
+}
+
+.glass-navbar {
+  background: var(--glass-header-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--surface-glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+  padding: 0.6rem 1.25rem;
+  transition: all 0.25s ease;
+}
+
+@supports not (backdrop-filter: blur(14px)) {
+  .glass-navbar {
+    background: var(--surface);
+  }
+}
+
+.navbar-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--text-main) !important;
+  letter-spacing: -0.03em;
+}
+
+.brand-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.nav-link {
+  color: var(--text-main) !important;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.85rem !important;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--primary) !important;
+  background-color: var(--primary-subtle);
+}
+
+.theme-toggle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--primary-subtle);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* ==========================================================================
+   Global Search Bar & Live Suggestion Panel
+   ========================================================================== */
+.search-wrapper-hero {
+  position: relative;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.search-input-glass {
+  width: 100%;
+  height: 56px;
+  padding: 0.75rem 3.5rem 0.75rem 3.25rem;
+  font-size: 1.05rem;
+  background: var(--surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  color: var(--text-main);
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s ease;
+}
+
+.search-input-glass:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: var(--focus-ring), var(--card-hover-shadow);
+}
+
+.search-prefix-icon {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+
+.search-action-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 40px;
+  padding: 0 1.25rem;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.search-suggestions-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-hover-shadow);
+  z-index: 1060;
+  max-height: 440px;
+  overflow-y: auto;
+  display: none;
+  padding: 0.5rem;
+}
+
+.suggestion-group-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 0.4rem 0.75rem;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  transition: background 0.15s ease;
+  cursor: pointer;
+}
+
+.suggestion-item:hover, .suggestion-item.active {
+  background: var(--primary-subtle);
+  color: var(--primary);
+}
+
+/* Header compact search */
+.search-input-header {
+  height: 38px;
+  padding-left: 2.25rem;
+  padding-right: 2rem;
+  font-size: 0.9rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+}
+
+.search-input-header:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: var(--focus-ring);
+}
+
+/* ==========================================================================
+   Cards & Surfaces
+   ========================================================================== */
+.mrh-card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mrh-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--card-hover-shadow);
+  border-color: rgba(var(--primary-rgb), 0.4);
+}
+
+.mrh-card-glass {
+  background: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-glass-border);
+}
+
+.mrh-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+}
+
+.mrh-badge-primary {
+  background: var(--primary-subtle);
+  color: var(--primary);
+}
+
+.mrh-badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+}
+
+.mrh-badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+}
+
+/* ==========================================================================
+   Specification Tables
+   ========================================================================== */
+.spec-group-header {
+  background: var(--surface-secondary);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  border-left: 4px solid var(--primary);
+}
+
+.spec-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 1.5rem;
+}
+
+.spec-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+.spec-label {
+  width: 28%;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.spec-value {
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.mrh-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: 3.5rem 0 2rem;
+  margin-top: 4rem;
+}
+
+.footer-link {
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.footer-link:hover {
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   Accessibility & Reduced Motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
