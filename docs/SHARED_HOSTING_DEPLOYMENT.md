@@ -71,3 +71,17 @@ require __DIR__.'/../../mobile-resource-hub-app/vendor/autoload.php';
    php artisan route:cache
    php artisan view:cache
    ```
+
+## 5. Large Firmware & Driver Storage Considerations on Shared Hosting
+On Hostinger shared hosting environments, PHP configurations impose upload ceilings:
+- Default `upload_max_filesize`: Typically 128MB – 512MB.
+- Default `post_max_size`: Typically 128MB – 512MB.
+- Default `max_execution_time`: 120 – 300 seconds.
+
+### Handling Strategy:
+1. **Multi-Gigabyte Firmware ROMs (4GB – 12GB):**
+   - Must be configured using **Authorized External Mirrors** (`distribution_permission: authorized_mirror`) pointing to high-speed CDNs, Cloudflare R2, AWS S3, or verified vendor servers.
+   - The `/downloads/mirror/{id}` gateway tracks requests and securely forwards the user without proxying large byte payloads through shared hosting PHP processes.
+2. **Tools & USB Drivers (< 200MB):**
+   - Can be directly uploaded to private server storage (`storage/app/private_downloads/`).
+   - Served via chunked 64 KB streams (`FileStorageService::streamDownload`), preventing memory exhaustion and timeout terminations.

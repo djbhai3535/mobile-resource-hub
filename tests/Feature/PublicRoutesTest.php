@@ -2,10 +2,23 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\AdminUserSeeder;
+use Database\Seeders\ContentSeeder;
+use Database\Seeders\RoleAndPermissionSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PublicRoutesTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(RoleAndPermissionSeeder::class);
+        $this->seed(AdminUserSeeder::class);
+        $this->seed(ContentSeeder::class);
+    }
     public function test_homepage_renders_successfully_with_all_core_sections(): void
     {
         $response = $this->get('/');
@@ -15,10 +28,10 @@ class PublicRoutesTest extends TestCase
         $response->assertSee('Search Specs, Firmware, &', false);
         $response->assertSee('Browse by Brand');
         $response->assertSee('Latest Mobile Devices');
-        $response->assertSee('Recent Firmware & Flash Files', false);
+        $response->assertSee('Recent Firmware &amp; Flash Files', false);
         $response->assertSee('Essential Flash Tools');
         $response->assertSee('Official USB Drivers');
-        $response->assertSee('Guides, Fixes & Tech News', false);
+        $response->assertSee('Guides, Fixes &amp; Tech News', false);
         $response->assertSee('Advertisement Slot');
         $response->assertSee('Privacy Policy');
         $response->assertSee('Terms of Service');
@@ -158,6 +171,16 @@ class PublicRoutesTest extends TestCase
         ]);
         $validResponse->assertSessionHas('success');
 
+        // Honeypot submission (silent success to fool bots without processing)
+        $botResponse = $this->post('/contact-us', [
+            'name' => 'Bot Tester',
+            'email' => 'bot@spammer.org',
+            'subject' => 'Spam Subject',
+            'message' => 'Spam content',
+            'mrh_website_hp' => 'I am a spambot',
+        ]);
+        $botResponse->assertSessionHas('success');
+
         // Validation failure
         $invalidResponse = $this->post('/contact-us', [
             'name' => '',
@@ -166,5 +189,15 @@ class PublicRoutesTest extends TestCase
             'message' => '',
         ]);
         $invalidResponse->assertSessionHasErrors(['name', 'email', 'subject', 'message']);
+    }
+
+    public function test_custom_404_error_page_renders_with_catalog_search(): void
+    {
+        $response = $this->get('/non-existent-device-route-xyz-404');
+        $response->assertStatus(404);
+        $response->assertSee('404 - Page Not Found');
+        $response->assertSee('Return to Homepage');
+        $response->assertSee('Browse All Phones');
+        $response->assertSee('Browse Firmware Hub');
     }
 }

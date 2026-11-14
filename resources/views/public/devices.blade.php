@@ -27,30 +27,26 @@
                 <form action="{{ url('/mobile-phones') }}" method="GET">
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Filter by Keyword</label>
-                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Model or name..." value="{{ $search }}">
+                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Model, designation, or name..." value="{{ $search }}">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Brand</label>
                         <select name="brand" class="form-select form-select-sm">
                             <option value="">All Brands</option>
-                            <option value="samsung" {{ $brandFilter === 'samsung' ? 'selected' : '' }}>Samsung</option>
-                            <option value="apple" {{ $brandFilter === 'apple' ? 'selected' : '' }}>Apple</option>
-                            <option value="xiaomi" {{ $brandFilter === 'xiaomi' ? 'selected' : '' }}>Xiaomi</option>
-                            <option value="google" {{ $brandFilter === 'google' ? 'selected' : '' }}>Google</option>
-                            <option value="oneplus" {{ $brandFilter === 'oneplus' ? 'selected' : '' }}>OnePlus</option>
-                            <option value="motorola" {{ $brandFilter === 'motorola' ? 'selected' : '' }}>Motorola</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Release Year</label>
-                        <select class="form-select form-select-sm">
-                            <option value="">All Years</option>
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
+                            @if(isset($allBrands))
+                                @foreach($allBrands as $b)
+                                    <option value="{{ $b->slug }}" {{ $brandFilter === $b->slug ? 'selected' : '' }}>
+                                        {{ $b->name }}
+                                    </option>
+                                @endforeach
+                            @else
+                                <option value="samsung" {{ $brandFilter === 'samsung' ? 'selected' : '' }}>Samsung</option>
+                                <option value="apple" {{ $brandFilter === 'apple' ? 'selected' : '' }}>Apple</option>
+                                <option value="xiaomi" {{ $brandFilter === 'xiaomi' ? 'selected' : '' }}>Xiaomi</option>
+                                <option value="google" {{ $brandFilter === 'google' ? 'selected' : '' }}>Google</option>
+                                <option value="oneplus" {{ $brandFilter === 'oneplus' ? 'selected' : '' }}>OnePlus</option>
+                            @endif
                         </select>
                     </div>
 
@@ -70,11 +66,17 @@
             <div class="row g-3">
                 @foreach($devices as $device)
                 <div class="col-12 col-md-6 col-xl-4">
-                    <div class="mrh-card">
+                    <div class="mrh-card h-100 d-flex flex-column">
                         <div class="p-3 bg-body text-center border-bottom">
-                            <div class="brand-icon-box mx-auto mb-2" style="width: 50px; height: 50px;">
-                                <i class="bi bi-phone"></i>
-                            </div>
+                            @if(!empty($device['featured_image']))
+                                <div class="p-2 mb-2 bg-white rounded border d-inline-block">
+                                    <img src="{{ asset('storage/' . $device['featured_image']) }}" alt="{{ $device['name'] }}" style="height: 60px; max-width: 100%; object-fit: contain;" loading="lazy">
+                                </div>
+                            @else
+                                <div class="brand-icon-box mx-auto mb-2" style="width: 50px; height: 50px;">
+                                    <i class="bi bi-phone"></i>
+                                </div>
+                            @endif
                             <span class="small text-muted text-uppercase fw-semibold">{{ $device['brand'] }}</span>
                             <h6 class="fw-bold mb-1 text-truncate">{{ $device['name'] }}</h6>
                             <code class="small text-primary">{{ $device['model'] }}</code>
@@ -85,7 +87,7 @@
                             <div class="mb-1 text-muted text-truncate"><i class="bi bi-battery-charging me-1 text-primary"></i> {{ $device['battery'] }}</div>
                             <div class="text-muted text-truncate"><i class="bi bi-calendar3 me-1 text-primary"></i> Released: {{ $device['release_year'] }}</div>
                         </div>
-                        <div class="p-3 pt-0">
+                        <div class="p-3 pt-0 mt-auto">
                             <a href="{{ url('/mobile-phones/' . $device['slug']) }}" class="btn btn-outline-primary btn-sm w-100 rounded-pill">
                                 View Specs & Resources &rarr;
                             </a>
@@ -94,6 +96,13 @@
                 </div>
                 @endforeach
             </div>
+
+            @if(isset($dbDevices))
+                <div class="mt-4">
+                    {{ $dbDevices->links() }}
+                </div>
+            @endif
+
             @else
             <div class="mrh-card p-5 text-center text-muted">
                 <i class="bi bi-search fs-1 mb-2"></i>

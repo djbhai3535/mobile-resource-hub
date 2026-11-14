@@ -54,18 +54,20 @@
 
 <!-- Configurable Advertisement Placeholder (PUB-008) -->
 <div class="container-xl my-2">
+    @ad('homepage_hero')
     <div class="p-3 text-center border rounded-3 text-muted small bg-body-tertiary">
-        <i class="bi bi-megaphone me-1"></i> Advertisement Slot (Responsive Banner — Configurable from Admin)
+        <i class="bi bi-megaphone me-1"></i> {{ $sections['ad_middle']->title ?? 'Advertisement Slot' }} (Responsive Banner — Configurable from Admin)
     </div>
 </div>
 
+@if(!isset($sections['popular_brands']) || $sections['popular_brands']->is_enabled)
 <!-- Popular Brands Section (PUB-003) -->
 <section class="py-5">
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
-                <h2 class="h3 fw-bold mb-1">Browse by Brand</h2>
-                <p class="text-muted mb-0 small">Explore official catalogs across leading smartphone manufacturers</p>
+                <h2 class="h3 fw-bold mb-1">{{ $sections['popular_brands']->title ?? 'Browse by Brand' }}</h2>
+                <p class="text-muted mb-0 small">{{ $sections['popular_brands']->subtitle ?? 'Explore official catalogs across leading smartphone manufacturers' }}</p>
             </div>
             <a href="{{ url('/brands') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                 View All Brands &rarr;
@@ -87,15 +89,17 @@
         </div>
     </div>
 </section>
+@endif
 
+@if(!isset($sections['latest_devices']) || $sections['latest_devices']->is_enabled)
 <!-- Latest Mobile Devices Section (PUB-004) -->
 <section class="py-5 bg-body-tertiary">
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
                 <span class="text-primary fw-bold text-uppercase small">Hardware Directory</span>
-                <h2 class="h3 fw-bold mb-1">Latest Mobile Devices</h2>
-                <p class="text-muted mb-0 small">Verified hardware specifications, model numbers, and technical benchmarks</p>
+                <h2 class="h3 fw-bold mb-1">{{ $sections['latest_devices']->title ?? 'Latest Mobile Devices' }}</h2>
+                <p class="text-muted mb-0 small">{{ $sections['latest_devices']->subtitle ?? 'Verified hardware specifications, model numbers, and technical benchmarks' }}</p>
             </div>
             <a href="{{ url('/mobile-phones') }}" class="btn btn-sm btn-primary rounded-pill px-3">
                 Browse All Phones &rarr;
@@ -146,15 +150,21 @@
         </div>
     </div>
 </section>
+@endif
 
+<div class="container-xl">
+    @ad('homepage_between_sections')
+</div>
+
+@if(!isset($sections['latest_firmware']) || $sections['latest_firmware']->is_enabled)
 <!-- Recently Published Firmware & Flash Resources (PUB-005) -->
 <section class="py-5">
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
                 <span class="text-warning fw-bold text-uppercase small">ROMs & Binaries</span>
-                <h2 class="h3 fw-bold mb-1">Recent Firmware & Flash Files</h2>
-                <p class="text-muted mb-0 small">Official manufacturer updates, service firmware, and CSC packages</p>
+                <h2 class="h3 fw-bold mb-1">{{ $sections['latest_firmware']->title ?? 'Recent Firmware & Flash Files' }}</h2>
+                <p class="text-muted mb-0 small">{{ $sections['latest_firmware']->subtitle ?? 'Official manufacturer updates, service firmware, and CSC packages' }}</p>
             </div>
             <a href="{{ url('/firmware') }}" class="btn btn-sm btn-outline-warning text-body rounded-pill px-3">
                 View Firmware Hub &rarr;
@@ -191,14 +201,16 @@
         </div>
     </div>
 </section>
+@endif
 
 <!-- Popular Software, Tools & Drivers (PUB-006) -->
 <section class="py-5 bg-body-tertiary">
     <div class="container-xl">
         <div class="row g-4">
+            @if(!isset($sections['software_tools']) || $sections['software_tools']->is_enabled)
             <div class="col-12 col-md-6">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3 class="h4 fw-bold mb-0">Essential Flash Tools</h3>
+                    <h3 class="h4 fw-bold mb-0">{{ $sections['software_tools']->title ?? 'Essential Flash Tools' }}</h3>
                     <a href="{{ url('/software') }}" class="small fw-bold">All Software &rarr;</a>
                 </div>
                 <div class="mrh-card p-3 mb-2">
@@ -220,10 +232,12 @@
                     </div>
                 </div>
             </div>
+            @endif
 
+            @if(!isset($sections['usb_drivers']) || $sections['usb_drivers']->is_enabled)
             <div class="col-12 col-md-6">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3 class="h4 fw-bold mb-0">Official USB Drivers</h3>
+                    <h3 class="h4 fw-bold mb-0">{{ $sections['usb_drivers']->title ?? 'Official USB Drivers' }}</h3>
                     <a href="{{ url('/drivers') }}" class="small fw-bold">All Drivers &rarr;</a>
                 </div>
                 <div class="mrh-card p-3 mb-2">
@@ -245,18 +259,20 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </section>
 
+@if(!isset($sections['tech_news']) || $sections['tech_news']->is_enabled)
 <!-- Latest News and Repair Tutorials (PUB-007) -->
 <section class="py-5">
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
                 <span class="text-success fw-bold text-uppercase small">Knowledge Base</span>
-                <h2 class="h3 fw-bold mb-1">Guides, Fixes & Tech News</h2>
-                <p class="text-muted mb-0 small">Curated step-by-step guides for flashing, driver troubleshooting, and mobile repairs</p>
+                <h2 class="h3 fw-bold mb-1">{{ $sections['tech_news']->title ?? 'Guides, Fixes & Tech News' }}</h2>
+                <p class="text-muted mb-0 small">{{ $sections['tech_news']->subtitle ?? 'Curated step-by-step guides for flashing, driver troubleshooting, and mobile repairs' }}</p>
             </div>
             <a href="{{ url('/tutorials') }}" class="btn btn-sm btn-outline-success text-body rounded-pill px-3">
                 Browse Guides &rarr;
@@ -289,4 +305,5 @@
         </div>
     </div>
 </section>
+@endif
 @endsection

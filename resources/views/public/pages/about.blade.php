@@ -27,6 +27,9 @@
                 </div>
 
                 <div class="content-body text-body" style="line-height: 1.8;">
+                    @if(isset($page) && $page->content)
+                        {!! $page->content !!}
+                    @else
                     <p class="lead text-muted">
                         <strong>Mobile Resource Hub</strong> was founded with a single objective: to provide technicians, developers, and mobile technology enthusiasts with an accurate, searchable, and dependable database of smartphone hardware specifications, official stock firmware builds, USB drivers, and repair tutorials.
                     </p>
@@ -50,6 +53,7 @@
                         </p>
                         <a href="{{ url('/contact-us') }}" class="btn btn-primary btn-sm rounded-pill px-4">Contact Our Team</a>
                     </div>
+                    @endif
                 </div>
             </article>
         </div>

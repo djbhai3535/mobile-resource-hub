@@ -19,6 +19,29 @@
     </div>
 
     <div class="row g-4">
+        @if(isset($posts) && $posts->count() > 0)
+            @foreach($posts as $post)
+            <div class="col-12 col-md-6">
+                <div class="mrh-card p-4 h-100 d-flex flex-column">
+                    <div class="d-flex gap-2 align-items-center mb-2">
+                        <span class="mrh-badge mrh-badge-success">{{ $post->category?->name ?? 'Update' }}</span>
+                        <span class="small text-muted">&bull; {{ $post->published_at ? $post->published_at->format('d M Y') : $post->created_at->format('d M Y') }}</span>
+                    </div>
+                    <h4 class="fw-bold mb-2">
+                        <a href="{{ url('/news/' . $post->slug) }}" class="text-body text-decoration-none">
+                            {{ $post->title }}
+                        </a>
+                    </h4>
+                    <p class="small text-muted mb-3 flex-grow-1">
+                        {{ $post->excerpt ?? \Illuminate\Support\Str::limit(strip_tags($post->content), 140) }}
+                    </p>
+                    <a href="{{ url('/news/' . $post->slug) }}" class="text-primary fw-semibold small text-decoration-none mt-auto">
+                        Read Full Story &rarr;
+                    </a>
+                </div>
+            </div>
+            @endforeach
+        @else
         <div class="col-12 col-md-6">
             <div class="mrh-card p-4">
                 <div class="d-flex gap-2 align-items-center mb-2">
@@ -58,6 +81,13 @@
                 </a>
             </div>
         </div>
+        @endif
     </div>
+
+    @if(isset($posts) && $posts->hasPages())
+    <div class="mt-4 d-flex justify-content-center">
+        {{ $posts->links() }}
+    </div>
+    @endif
 </div>
 @endsection

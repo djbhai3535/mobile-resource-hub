@@ -20,6 +20,9 @@
                 <div class="text-muted small mb-4">Effective Date: 13 November 2026</div>
 
                 <div class="content-body" style="line-height: 1.8;">
+                    @if(isset($page) && $page->content)
+                        {!! $page->content !!}
+                    @else
                     <p>
                         <strong>Mobile Resource Hub</strong> respects intellectual property rights and adheres strictly to applicable copyright laws, including the Digital Millennium Copyright Act (DMCA).
                     </p>
@@ -41,6 +44,7 @@
                     <p>
                         Please direct all formal DMCA and copyright notices to our designated agent via our <a href="{{ url('/contact-us') }}">Contact Form</a> with the subject line <code>DMCA Copyright Notice</code>. Valid notices are processed promptly, and disputed links are disabled during review.
                     </p>
+                    @endif
                 </div>
             </article>
         </div>

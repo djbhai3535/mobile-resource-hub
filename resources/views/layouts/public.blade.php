@@ -8,6 +8,9 @@
     <title>@yield('title', 'Mobile Resource Hub — Phone Specs, Firmware, Drivers & Guides')</title>
     <meta name="description" content="@yield('meta_description', 'Discover verified mobile phone specifications, firmware releases, official flash files, USB drivers, and in-depth repair tutorials.')">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
+    @hasSection('robots')
+    <meta name="robots" content="@yield('robots')">
+    @endif
     
     <!-- Open Graph -->
     <meta property="og:title" content="@yield('title', 'Mobile Resource Hub')">
@@ -31,6 +34,24 @@
         })();
     </script>
 
+    <!-- Schema.org WebSite & SearchAction JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "{{ '@' }}context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Mobile Resource Hub",
+        "url": "{{ url('/') }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ url('/search') }}?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,6 +61,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
+    @stack('scripts_head')
+
+    <!-- Dynamic Theme Customizer Styles -->
+    <style id="mrh-dynamic-theme-css">
+        {!! app('App\Services\ThemeService')->getCachedThemeCss() !!}
+    </style>
 </head>
 <body>
 
@@ -196,7 +223,13 @@
 
     <!-- Main Content Area -->
     <main>
+        <div class="container-xl">
+            @ad('header_below_nav')
+        </div>
         @yield('content')
+        <div class="container-xl">
+            @ad('global_footer')
+        </div>
     </main>
 
     <!-- Global Responsive Footer -->

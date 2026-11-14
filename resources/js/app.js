@@ -146,12 +146,45 @@ function renderSuggestions(data, panel, query) {
     }
 
     if (data.firmware?.length) {
-        html += `<div class="suggestion-group-title"><i class="bi bi-cpu me-1"></i> Firmware & Flash</div>`;
+        html += `<div class="suggestion-group-title"><i class="bi bi-cpu me-1"></i> Stock Firmware</div>`;
         data.firmware.forEach(item => {
             html += `
                 <a href="${item.url}" class="suggestion-item text-decoration-none">
-                    <span>${escapeHtml(item.title)}</span>
+                    <span>${escapeHtml(item.title || item.name)}</span>
                     <span class="mrh-badge mrh-badge-warning">Firmware</span>
+                </a>`;
+        });
+    }
+
+    if (data.flash_files?.length) {
+        html += `<div class="suggestion-group-title"><i class="bi bi-file-earmark-zip me-1"></i> Flash Files</div>`;
+        data.flash_files.forEach(item => {
+            html += `
+                <a href="${item.url}" class="suggestion-item text-decoration-none">
+                    <span>${escapeHtml(item.title || item.name)}</span>
+                    <span class="mrh-badge mrh-badge-warning">Flash ROM</span>
+                </a>`;
+        });
+    }
+
+    if (data.software?.length) {
+        html += `<div class="suggestion-group-title"><i class="bi bi-tools me-1"></i> Software Tools</div>`;
+        data.software.forEach(item => {
+            html += `
+                <a href="${item.url}" class="suggestion-item text-decoration-none">
+                    <span>${escapeHtml(item.title || item.name)}</span>
+                    <span class="mrh-badge mrh-badge-primary">Tool</span>
+                </a>`;
+        });
+    }
+
+    if (data.drivers?.length) {
+        html += `<div class="suggestion-group-title"><i class="bi bi-usb-symbol me-1"></i> USB Drivers</div>`;
+        data.drivers.forEach(item => {
+            html += `
+                <a href="${item.url}" class="suggestion-item text-decoration-none">
+                    <span>${escapeHtml(item.title || item.name)}</span>
+                    <span class="mrh-badge mrh-badge-secondary">Driver</span>
                 </a>`;
         });
     }

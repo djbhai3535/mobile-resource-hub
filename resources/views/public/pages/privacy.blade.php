@@ -20,6 +20,9 @@
                 <div class="text-muted small mb-4">Effective Date: 13 November 2026</div>
 
                 <div class="content-body" style="line-height: 1.8;">
+                    @if(isset($page) && $page->content)
+                        {!! $page->content !!}
+                    @else
                     <p>
                         At <strong>Mobile Resource Hub</strong>, visitor privacy is a paramount concern. This Privacy Policy outlines what information we collect, how it is handled, and your rights concerning your personal data.
                     </p>
@@ -49,6 +52,7 @@
                     <p>
                         If you have questions regarding this Privacy Policy or wish to request data deletion, please reach out via our <a href="{{ url('/contact-us') }}">Contact Page</a>.
                     </p>
+                    @endif
                 </div>
             </article>
         </div>

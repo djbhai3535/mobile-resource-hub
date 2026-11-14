@@ -20,6 +20,9 @@
                 <div class="text-muted small mb-4">Effective Date: 13 November 2026</div>
 
                 <div class="content-body" style="line-height: 1.8;">
+                    @if(isset($page) && $page->content)
+                        {!! $page->content !!}
+                    @else
                     <p>
                         Welcome to <strong>Mobile Resource Hub</strong>. By accessing or using our website, you agree to comply with and be bound by the following terms of use.
                     </p>
@@ -38,6 +41,7 @@
                     <p>
                         You agree not to engage in malicious activities against this website, including denial-of-service attacks, automated high-frequency scraping that degrades server performance, or injecting malicious scripts.
                     </p>
+                    @endif
                 </div>
             </article>
         </div>
