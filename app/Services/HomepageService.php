@@ -261,89 +261,94 @@ class HomepageService
      */
     public function hydrateSectionData(HomepageSection $section): mixed
     {
-        $count = max(1, $section->item_count);
+        try {
+            $count = max(1, $section->item_count);
 
-        switch ($section->section_key) {
-            case 'popular_brands':
-                return Brand::where('status', 'active')
-                    ->withCount('devices')
-                    ->orderByDesc('devices_count')
-                    ->orderBy('name')
-                    ->take($count)
-                    ->get();
+            switch ($section->section_key) {
+                case 'popular_brands':
+                    return Brand::where('status', 'active')
+                        ->withCount('devices')
+                        ->orderByDesc('devices_count')
+                        ->orderBy('name')
+                        ->take($count)
+                        ->get();
 
-            case 'latest_devices':
-                return Device::published()
-                    ->with(['brand', 'modelNumbers'])
-                    ->latest('id')
-                    ->take($count)
-                    ->get();
-
-            case 'featured_devices':
-                $featured = Device::published()
-                    ->where('is_featured', true)
-                    ->with(['brand', 'modelNumbers'])
-                    ->latest('id')
-                    ->take($count)
-                    ->get();
-
-                if ($featured->isEmpty()) {
-                    // Fallback to top latest devices
-                    $featured = Device::published()
+                case 'latest_devices':
+                    return Device::published()
                         ->with(['brand', 'modelNumbers'])
                         ->latest('id')
                         ->take($count)
                         ->get();
-                }
-                return $featured;
 
-            case 'latest_firmware':
-                return Firmware::published()
-                    ->with(['brand', 'device'])
-                    ->latest('id')
-                    ->take($count)
-                    ->get();
+                case 'featured_devices':
+                    $featured = Device::published()
+                        ->where('is_featured', true)
+                        ->with(['brand', 'modelNumbers'])
+                        ->latest('id')
+                        ->take($count)
+                        ->get();
 
-            case 'flash_files':
-                return FlashFile::published()
-                    ->with(['brand', 'device'])
-                    ->latest('id')
-                    ->take($count)
-                    ->get();
+                    if ($featured->isEmpty()) {
+                        // Fallback to top latest devices
+                        $featured = Device::published()
+                            ->with(['brand', 'modelNumbers'])
+                            ->latest('id')
+                            ->take($count)
+                            ->get();
+                    }
+                    return $featured;
 
-            case 'software_tools':
-                return SoftwareTool::published()
-                    ->latest('id')
-                    ->take($count)
-                    ->get();
+                case 'latest_firmware':
+                    return Firmware::published()
+                        ->with(['brand', 'device'])
+                        ->latest('id')
+                        ->take($count)
+                        ->get();
 
-            case 'usb_drivers':
-                return Driver::published()
-                    ->with('brand')
-                    ->latest('id')
-                    ->take($count)
-                    ->get();
+                case 'flash_files':
+                    return FlashFile::published()
+                        ->with(['brand', 'device'])
+                        ->latest('id')
+                        ->take($count)
+                        ->get();
 
-            case 'tech_news':
-                return Post::published()
-                    ->where(function ($q) {
-                        $q->whereNull('type')->orWhere('type', 'post')->orWhere('type', 'news');
-                    })
-                    ->with(['author', 'category'])
-                    ->latest('published_at')
-                    ->take($count)
-                    ->get();
+                case 'software_tools':
+                    return SoftwareTool::published()
+                        ->latest('id')
+                        ->take($count)
+                        ->get();
 
-            case 'tutorials':
-                return Post::published()
-                    ->where('type', 'tutorial')
-                    ->with(['author', 'category'])
-                    ->latest('published_at')
-                    ->take($count)
-                    ->get();
+                case 'usb_drivers':
+                    return Driver::published()
+                        ->with('brand')
+                        ->latest('id')
+                        ->take($count)
+                        ->get();
 
-            default:
-                return collect([]);
+                case 'tech_news':
+                    return Post::published()
+                        ->where(function ($q) {
+                            $q->whereNull('type')->orWhere('type', 'post')->orWhere('type', 'news');
+                        })
+                        ->with(['author', 'category'])
+                        ->latest('published_at')
+                        ->take($count)
+                        ->get();
+
+                case 'tutorials':
+                    return Post::published()
+                        ->where('type', 'tutorial')
+                        ->with(['author', 'category'])
+                        ->latest('published_at')
+                        ->take($count)
+                        ->get();
+
+                default:
+                    return collect([]);
+            }
+        } catch (\Throwable $e) {
+            // Data hydration failure must never break homepage rendering
+            return collect([]);
         }
     }
 

@@ -163,39 +163,44 @@ class AdvertisementService
      */
     public function render(string $placement, ?string $deviceType = null, ?string $theme = null): string
     {
-        $ad = $this->getActiveAdForPlacement($placement, $deviceType, $theme);
+        try {
+            $ad = $this->getActiveAdForPlacement($placement, $deviceType, $theme);
 
-        if (!$ad) {
+            if (!$ad) {
+                return '';
+            }
+
+            // Record impression
+            $this->recordImpression($ad, $placement, $deviceType ?? 'desktop', $theme ?? 'light');
+
+            $html = '<div class="mrh-ad-slot my-3 text-center" data-placement="' . e($placement) . '" style="min-height: 50px;">';
+            $html .= '<div class="small text-muted text-uppercase mb-1" style="font-size: 0.68rem; letter-spacing: 0.08em; opacity: 0.7;">Advertisement</div>';
+
+            if ($ad->type === 'custom_html' && !empty($ad->custom_html)) {
+                // Super Admin custom snippet
+                $html .= '<div class="mrh-ad-custom d-inline-block">' . $ad->custom_html . '</div>';
+            } elseif ($ad->image_path) {
+                $clickUrl = route('ad.click', $ad->id);
+                $imgUrl = asset('storage/' . $ad->image_path);
+                $alt = e($ad->image_alt ?: $ad->name);
+
+                $html .= '<a href="' . $clickUrl . '" target="_blank" rel="sponsored noopener noreferrer" class="d-inline-block text-decoration-none">';
+                $html .= '<img src="' . $imgUrl . '" alt="' . $alt . '" class="img-fluid rounded border shadow-sm" style="max-height: 250px; object-fit: contain;">';
+                $html .= '</a>';
+            } elseif ($ad->destination_url) {
+                $clickUrl = route('ad.click', $ad->id);
+                $html .= '<a href="' . $clickUrl . '" target="_blank" rel="sponsored noopener noreferrer" class="btn btn-outline-primary btn-sm rounded-pill px-4">';
+                $html .= e($ad->name) . ' &rarr;';
+                $html .= '</a>';
+            }
+
+            $html .= '</div>';
+
+            return $html;
+        } catch (\Throwable $e) {
+            // Advertisement failures must never break public page rendering
             return '';
         }
-
-        // Record impression
-        $this->recordImpression($ad, $placement, $deviceType ?? 'desktop', $theme ?? 'light');
-
-        $html = '<div class="mrh-ad-slot my-3 text-center" data-placement="' . e($placement) . '" style="min-height: 50px;">';
-        $html .= '<div class="small text-muted text-uppercase mb-1" style="font-size: 0.68rem; letter-spacing: 0.08em; opacity: 0.7;">Advertisement</div>';
-
-        if ($ad->type === 'custom_html' && !empty($ad->custom_html)) {
-            // Super Admin custom snippet
-            $html .= '<div class="mrh-ad-custom d-inline-block">' . $ad->custom_html . '</div>';
-        } elseif ($ad->image_path) {
-            $clickUrl = route('ad.click', $ad->id);
-            $imgUrl = asset('storage/' . $ad->image_path);
-            $alt = e($ad->image_alt ?: $ad->name);
-
-            $html .= '<a href="' . $clickUrl . '" target="_blank" rel="sponsored noopener noreferrer" class="d-inline-block text-decoration-none">';
-            $html .= '<img src="' . $imgUrl . '" alt="' . $alt . '" class="img-fluid rounded border shadow-sm" style="max-height: 250px; object-fit: contain;">';
-            $html .= '</a>';
-        } elseif ($ad->destination_url) {
-            $clickUrl = route('ad.click', $ad->id);
-            $html .= '<a href="' . $clickUrl . '" target="_blank" rel="sponsored noopener noreferrer" class="btn btn-outline-primary btn-sm rounded-pill px-4">';
-            $html .= e($ad->name) . ' &rarr;';
-            $html .= '</a>';
-        }
-
-        $html .= '</div>';
-
-        return $html;
     }
 
     /**

@@ -32,4 +32,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        // Resilient system error log hook: ensures all unhandled exceptions are visible in
+        // Nginx / PHP-FPM error logs regardless of storage/logs directory permissions.
+        $exceptions->report(function (\Throwable $e) {
+            error_log(sprintf('[MRH ERROR] %s: %s in %s:%d', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine()));
+        });
     })->create();
