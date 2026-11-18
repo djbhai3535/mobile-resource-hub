@@ -248,6 +248,34 @@ class MySQLCompatibilityTest extends TestCase
         $this->assertStringContainsString('`mirrorable_type` varchar(191) not null', $mirrorSql);
         $this->assertStringContainsString('`mirrorable_id` bigint unsigned not null', $mirrorSql);
         $this->assertStringContainsString('index `download_mirrors_mirrorable_type_mirrorable_id_index`(`mirrorable_type`, `mirrorable_id`)', $mirrorSql);
+
+        // download_requests with explicit short index name
+        $reqBlueprint = new Blueprint($this->connection, 'download_requests');
+        $reqBlueprint->create();
+        $reqBlueprint->id();
+        $reqBlueprint->morphs('downloadable');
+        $reqBlueprint->foreignId('mirror_id')->nullable()->constrained('download_mirrors')->nullOnDelete();
+        $reqBlueprint->string('ip_address', 45)->nullable();
+        $reqBlueprint->text('user_agent')->nullable();
+        $reqBlueprint->string('status', 30)->default('initiated');
+        $reqBlueprint->timestamp('created_at')->useCurrent();
+        $reqBlueprint->index(['downloadable_type', 'downloadable_id', 'created_at'], 'dl_req_dl_type_dl_id_created_idx');
+
+        $reqStatements = $reqBlueprint->toSql($this->connection, $this->grammar);
+        $reqSql = implode('; ', $reqStatements);
+
+        $this->assertStringContainsString('create table `download_requests`', $reqSql);
+        $this->assertStringContainsString('index `dl_req_dl_type_dl_id_created_idx`(`downloadable_type`, `downloadable_id`, `created_at`)', $reqSql);
+
+        // Assert the index name is strictly <= 64 characters (MySQL limit)
+        $this->assertLessThanOrEqual(64, strlen('dl_req_dl_type_dl_id_created_idx'));
+
+        // Test dropping the index using the explicit name in down migration
+        $dropBlueprint = new Blueprint($this->connection, 'download_requests');
+        $dropBlueprint->dropIndex('dl_req_dl_type_dl_id_created_idx');
+        $dropStatements = $dropBlueprint->toSql($this->connection, $this->grammar);
+        $dropSql = implode('; ', $dropStatements);
+        $this->assertStringContainsString('alter table `download_requests` drop index `dl_req_dl_type_dl_id_created_idx`', $dropSql);
     }
 
     public function test_flash_files_software_and_drivers_mysql_ddl(): void

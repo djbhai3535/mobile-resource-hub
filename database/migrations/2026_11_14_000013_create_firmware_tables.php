@@ -87,7 +87,7 @@ return new class extends Migration
                 $table->string('status', 30)->default('initiated'); // initiated, redirected, streamed
                 $table->timestamp('created_at')->useCurrent();
 
-                $table->index(['downloadable_type', 'downloadable_id', 'created_at']);
+                $table->index(['downloadable_type', 'downloadable_id', 'created_at'], 'dl_req_dl_type_dl_id_created_idx');
             });
         }
     }
@@ -97,6 +97,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (Schema::hasTable('download_requests')) {
+            Schema::table('download_requests', function (Blueprint $table) {
+                $table->dropIndex('dl_req_dl_type_dl_id_created_idx');
+            });
+        }
         Schema::dropIfExists('download_requests');
         Schema::dropIfExists('download_mirrors');
         Schema::dropIfExists('firmwares');
