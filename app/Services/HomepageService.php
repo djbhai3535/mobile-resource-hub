@@ -159,6 +159,12 @@ class HomepageService
 
     /**
      * Get ordered sections list.
+     *
+     * Defensive against stale/corrupt cache entries (e.g. __PHP_Incomplete_Class
+     * caused by serialized Eloquent objects stored before a class rename/refactor).
+     * On any deserialization failure the corrupted cache keys are flushed and a
+     * fresh query is executed so the application never returns HTTP 500 due to
+     * cache-layer problems.
      */
     public function getOrderedSections(bool $enabledOnly = true): Collection
     {
@@ -166,13 +172,54 @@ class HomepageService
 
         $cacheKey = $enabledOnly ? self::CACHE_KEY_HOMEPAGE_SECTIONS . '_enabled' : self::CACHE_KEY_HOMEPAGE_SECTIONS . '_all';
 
-        return Cache::remember($cacheKey, 3600, function () use ($enabledOnly) {
-            $query = HomepageSection::ordered();
-            if ($enabledOnly) {
-                $query->enabled();
+        // First attempt: read from cache
+        try {
+            $cached = Cache::get($cacheKey);
+
+            // Guard: a valid cached value must be a Collection of HomepageSection models.
+            // If the cache contains __PHP_Incomplete_Class instances (stale serialized data)
+            // the Collection items will not be instances of HomepageSection.
+            if ($cached !== null) {
+                if (!($cached instanceof Collection)) {
+                    throw new \RuntimeException('Cached value is not a Collection — flushing stale cache.');
+                }
+
+                // Check each item is a proper Eloquent model (not __PHP_Incomplete_Class)
+                foreach ($cached as $item) {
+                    if (!($item instanceof HomepageSection)) {
+                        throw new \RuntimeException('Cached Collection contains non-HomepageSection items — flushing stale cache.');
+                    }
+                }
+
+                return $cached;
             }
-            return $query->get();
-        });
+        } catch (\Throwable $e) {
+            // Stale or corrupt cache — flush all homepage section cache keys
+            $this->clearCache();
+        }
+
+        // Fresh DB query (cache miss or after flush)
+        $fresh = $this->fetchFromDatabase($enabledOnly);
+
+        try {
+            Cache::put($cacheKey, $fresh, 3600);
+        } catch (\Throwable $e) {
+            // Cache write failure must never crash the public page
+        }
+
+        return $fresh;
+    }
+
+    /**
+     * Execute the raw database query for homepage sections.
+     */
+    private function fetchFromDatabase(bool $enabledOnly): Collection
+    {
+        $query = HomepageSection::ordered();
+        if ($enabledOnly) {
+            $query->enabled();
+        }
+        return $query->get();
     }
 
     /**

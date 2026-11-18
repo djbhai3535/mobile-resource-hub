@@ -65,7 +65,7 @@
 
     <!-- Dynamic Theme Customizer Styles -->
     <style id="mrh-dynamic-theme-css">
-        {!! app('App\Services\ThemeService')->getCachedThemeCss() !!}
+        {!! (function() { try { return app('App\Services\ThemeService')->getCachedThemeCss(); } catch (\Throwable $e) { return ''; } })() !!}
     </style>
 </head>
 <body>
@@ -317,7 +317,11 @@
 
     <!-- Floating WhatsApp Support Button -->
     @php
-        $whatsappUrl = \App\Models\SiteSetting::getWhatsAppUrl();
+        try {
+            $whatsappUrl = \App\Models\SiteSetting::getWhatsAppUrl();
+        } catch (\Throwable $e) {
+            $whatsappUrl = null;
+        }
     @endphp
     @if($whatsappUrl)
     <aside aria-label="Support">

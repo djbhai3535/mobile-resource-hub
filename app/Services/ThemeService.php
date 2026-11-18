@@ -141,19 +141,39 @@ class ThemeService
 
     /**
      * Get active published theme settings (cached).
+     *
+     * Defensive: if cache returns a non-array (e.g. __PHP_Incomplete_Class from
+     * stale serialized data) the cache is flushed and rebuilt from DB.
      */
     public function getPublishedSettings(): array
     {
-        return Cache::remember(self::CACHE_KEY_PUBLISHED_SETTINGS, 86400, function () {
+        try {
+            $cached = Cache::get(self::CACHE_KEY_PUBLISHED_SETTINGS);
+            if ($cached !== null) {
+                if (!is_array($cached)) {
+                    throw new \RuntimeException('Cached theme settings are not an array — flushing.');
+                }
+                return $cached;
+            }
+        } catch (\Throwable $e) {
+            Cache::forget(self::CACHE_KEY_PUBLISHED_SETTINGS);
+        }
+
+        try {
             $theme = $this->getActiveTheme();
             $setting = $theme->publishedSettings;
+            $settings = $setting ? $this->normalizeSettings($setting) : $this->getDefaultSettings();
+        } catch (\Throwable $e) {
+            $settings = $this->getDefaultSettings();
+        }
 
-            if (!$setting) {
-                return $this->getDefaultSettings();
-            }
+        try {
+            Cache::put(self::CACHE_KEY_PUBLISHED_SETTINGS, $settings, 86400);
+        } catch (\Throwable $e) {
+            // Cache write failure must never crash public pages
+        }
 
-            return $this->normalizeSettings($setting);
-        });
+        return $settings;
     }
 
     /**
@@ -364,13 +384,40 @@ class ThemeService
 
     /**
      * Get cached published theme CSS.
+     *
+     * Defensive against stale cache (PHP deserialization of old objects returns
+     * __PHP_Incomplete_Class). If the cache value is not a plain string, flush and
+     * regenerate so the public layout never crashes.
      */
     public function getCachedThemeCss(): string
     {
-        return Cache::remember(self::CACHE_KEY_PUBLISHED_CSS, 86400, function () {
+        try {
+            $cached = Cache::get(self::CACHE_KEY_PUBLISHED_CSS);
+            if ($cached !== null) {
+                if (!is_string($cached)) {
+                    throw new \RuntimeException('Cached theme CSS is not a string — flushing.');
+                }
+                return $cached;
+            }
+        } catch (\Throwable $e) {
+            Cache::forget(self::CACHE_KEY_PUBLISHED_CSS);
+        }
+
+        try {
             $settings = $this->getPublishedSettings();
-            return $this->generateCssVariables($settings);
-        });
+            $css = $this->generateCssVariables($settings);
+        } catch (\Throwable $e) {
+            // If theme DB is unavailable, return empty string rather than 500
+            $css = '';
+        }
+
+        try {
+            Cache::put(self::CACHE_KEY_PUBLISHED_CSS, $css, 86400);
+        } catch (\Throwable $e) {
+            // Cache write failure must never crash public pages
+        }
+
+        return $css;
     }
 
     /**
