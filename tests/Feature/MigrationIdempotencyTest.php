@@ -162,5 +162,17 @@ class MigrationIdempotencyTest extends TestCase
             ->where('migration', '2026_11_14_000013_create_firmware_tables')
             ->exists();
         $this->assertTrue($hasRunMigration, 'The migration 2026_11_14_000013_create_firmware_tables must be marked as ran.');
+
+        // 7. Verify forward migration 2026_11_18_000001_ensure_download_requests_composite_index
+        $hasForwardMigration = DB::connection('migration_test')
+            ->table('migrations')
+            ->where('migration', '2026_11_18_000001_ensure_download_requests_composite_index')
+            ->exists();
+        $this->assertTrue($hasForwardMigration, 'The forward migration must be recorded as ran.');
+
+        // 8. Verify the index exists on download_requests
+        $indexes = Schema::connection('migration_test')->getIndexes('download_requests');
+        $indexNames = array_column($indexes, 'name');
+        $this->assertContains('dl_req_dl_type_dl_id_created_idx', $indexNames);
     }
 }
