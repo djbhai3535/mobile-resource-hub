@@ -82,6 +82,8 @@ Route::post('/contact-us', function (\Illuminate\Http\Request $request) {
 Route::get('/privacy-policy', [PublicPageController::class, 'privacyPolicy'])->name('privacy');
 Route::get('/terms-and-conditions', [PublicPageController::class, 'termsAndConditions'])->name('terms');
 Route::get('/dmca', [PublicPageController::class, 'dmca'])->name('dmca');
+Route::get('/disclaimer', [PublicPageController::class, 'disclaimer'])->name('disclaimer');
+Route::get('/editorial-policy', [PublicPageController::class, 'editorialPolicy'])->name('editorial-policy');
 
 // Technical SEO & XML Sitemap Engine (PRD Section 10)
 Route::get('/sitemap.xml', [\App\Http\Controllers\Public\SitemapController::class, 'index'])->name('sitemap.index');

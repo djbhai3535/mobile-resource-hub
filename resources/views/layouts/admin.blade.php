@@ -25,19 +25,29 @@
 
     <style>
         /* Admin-specific Layout Extensions */
+        html, body.admin-body {
+            height: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
         .admin-sidebar {
             width: 260px;
-            min-height: 100vh;
-            background: var(--surface-color);
-            border-right: 1px solid var(--border-color);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background: var(--surface-color, var(--surface, #141E30));
+            border-right: 1px solid var(--border-color, var(--border-subtle, #263449));
             transition: transform 0.25s ease;
             z-index: 1040;
+            overflow-y: auto;
         }
         .admin-content-wrapper {
             flex: 1;
             min-width: 0;
-            background: var(--bg-color);
+            background: var(--bg-color, var(--bg-app, #0B1220));
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         .admin-nav-link {
             display: flex;
@@ -84,7 +94,7 @@
     </style>
     @stack('styles')
 </head>
-<body class="d-flex">
+<body class="d-flex admin-body">
     <!-- Admin Sidebar -->
     <aside class="admin-sidebar d-flex flex-column p-3 position-relative" id="adminSidebar">
         <!-- Brand Header -->
@@ -201,6 +211,10 @@
                 <i class="bi bi-graph-up-arrow"></i>
                 <span>Search Analytics</span>
             </a>
+            <a href="{{ route('admin.settings.whatsapp') }}" class="admin-nav-link {{ request()->routeIs('admin.settings.whatsapp*') ? 'active' : '' }}">
+                <i class="bi bi-whatsapp text-success"></i>
+                <span>WhatsApp Support</span>
+            </a>
         </nav>
 
         <!-- Sidebar Footer -->
@@ -307,9 +321,15 @@
         </footer>
     </div>
 
-    <!-- Mobile Sidebar Toggle Scripts -->
+    <!-- Mobile Sidebar Toggle Scripts & Scroll Positioning -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Guarantee admin viewport is scrolled to top on navigation
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            window.scrollTo(0, 0);
+
             const sidebar = document.getElementById('adminSidebar');
             const openBtn = document.getElementById('openSidebarBtn');
             const closeBtn = document.getElementById('closeSidebarBtn');

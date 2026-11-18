@@ -657,4 +657,16 @@ class PublicPageController extends Controller
         $page = \App\Models\Page::published()->where('system_key', 'dmca')->first();
         return view('public.pages.dmca', compact('page'));
     }
+
+    public function disclaimer(): View
+    {
+        $page = \App\Models\Page::published()->where('system_key', 'disclaimer')->first();
+        return view('public.pages.disclaimer', compact('page'));
+    }
+
+    public function editorialPolicy(): View
+    {
+        $page = \App\Models\Page::published()->where('system_key', 'editorial-policy')->first();
+        return view('public.pages.editorial-policy', compact('page'));
+    }
 }

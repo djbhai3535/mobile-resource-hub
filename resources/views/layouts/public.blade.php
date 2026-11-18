@@ -294,7 +294,10 @@
                         <li><a href="{{ url('/contact-us') }}" class="footer-link">Contact Us</a></li>
                         <li><a href="{{ url('/privacy-policy') }}" class="footer-link">Privacy Policy</a></li>
                         <li><a href="{{ url('/terms-and-conditions') }}" class="footer-link">Terms of Service</a></li>
+                        <li><a href="{{ url('/disclaimer') }}" class="footer-link">Disclaimer</a></li>
+                        <li><a href="{{ url('/editorial-policy') }}" class="footer-link">Editorial Policy</a></li>
                         <li><a href="{{ url('/dmca') }}" class="footer-link">DMCA & Copyright</a></li>
+                        <li><a href="{{ url('/sitemap.xml') }}" class="footer-link" target="_blank">XML Sitemap</a></li>
                     </ul>
                 </div>
             </div>
@@ -311,6 +314,27 @@
             </div>
         </div>
     </footer>
+
+    <!-- Floating WhatsApp Support Button -->
+    @php
+        $whatsappUrl = \App\Models\SiteSetting::getWhatsAppUrl();
+    @endphp
+    @if($whatsappUrl)
+    <aside aria-label="Support">
+        <a 
+            href="{{ $whatsappUrl }}" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="mrh-whatsapp-float" 
+            id="mrhWhatsAppButton"
+            title="Chat with Mobile Resource Hub Support on WhatsApp"
+            aria-label="Chat with Support on WhatsApp"
+        >
+            <i class="bi bi-whatsapp"></i>
+            <span class="mrh-whatsapp-label">WhatsApp Support</span>
+        </a>
+    </aside>
+    @endif
 
     @stack('scripts')
 </body>

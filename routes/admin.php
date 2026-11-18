@@ -188,4 +188,8 @@ Route::middleware('admin.auth')->group(function () {
 
     // Audit & Activity Logs
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity.index');
+
+    // Platform & Support Settings
+    Route::get('/settings/whatsapp', [\App\Http\Controllers\Admin\SettingController::class, 'whatsapp'])->name('settings.whatsapp');
+    Route::post('/settings/whatsapp', [\App\Http\Controllers\Admin\SettingController::class, 'updateWhatsapp'])->name('settings.whatsapp.update');
 });

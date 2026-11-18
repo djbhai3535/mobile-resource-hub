@@ -258,6 +258,8 @@ class SeoService
                     ['loc' => route('privacy'), 'priority' => '0.3', 'changefreq' => 'yearly'],
                     ['loc' => route('terms'), 'priority' => '0.3', 'changefreq' => 'yearly'],
                     ['loc' => route('dmca'), 'priority' => '0.3', 'changefreq' => 'yearly'],
+                    ['loc' => route('disclaimer'), 'priority' => '0.3', 'changefreq' => 'yearly'],
+                    ['loc' => route('editorial-policy'), 'priority' => '0.4', 'changefreq' => 'yearly'],
                 ];
 
                 $dbPages = Page::where('status', 'published')->select('slug', 'updated_at')->get()->map(function ($pg) {
@@ -308,6 +310,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /downloads/mirror/
+Disallow: /ad/click/
 
 Sitemap: {$sitemapUrl}
 ROBOTS;
