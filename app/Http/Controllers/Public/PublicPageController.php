@@ -37,16 +37,17 @@ class PublicPageController extends Controller
                     'count' => $b->devices_count,
                     'icon' => strtolower($b->slug) === 'apple' ? 'bi-apple' : (strtolower($b->slug) === 'google' ? 'bi-google' : 'bi-phone'),
                     'logo' => $b->logo_url,
+                    'brand_meta' => Brand::getBrandColorMeta($b->slug),
                 ];
             })->toArray();
         } else {
             $popularBrands = [
-                ['name' => 'Samsung', 'slug' => 'samsung', 'count' => 142, 'icon' => 'bi-phone', 'logo' => null],
-                ['name' => 'Apple', 'slug' => 'apple', 'count' => 58, 'icon' => 'bi-apple', 'logo' => null],
-                ['name' => 'Xiaomi', 'slug' => 'xiaomi', 'count' => 110, 'icon' => 'bi-phone', 'logo' => null],
-                ['name' => 'Google', 'slug' => 'google', 'count' => 34, 'icon' => 'bi-google', 'logo' => null],
-                ['name' => 'OnePlus', 'slug' => 'oneplus', 'count' => 45, 'icon' => 'bi-phone', 'logo' => null],
-                ['name' => 'Motorola', 'slug' => 'motorola', 'count' => 62, 'icon' => 'bi-phone', 'logo' => null],
+                ['name' => 'Samsung', 'slug' => 'samsung', 'count' => 142, 'icon' => 'bi-phone', 'logo' => null, 'brand_meta' => Brand::getBrandColorMeta('samsung')],
+                ['name' => 'Apple', 'slug' => 'apple', 'count' => 58, 'icon' => 'bi-apple', 'logo' => null, 'brand_meta' => Brand::getBrandColorMeta('apple')],
+                ['name' => 'Xiaomi', 'slug' => 'xiaomi', 'count' => 110, 'icon' => 'bi-phone', 'logo' => null, 'brand_meta' => Brand::getBrandColorMeta('xiaomi')],
+                ['name' => 'Google', 'slug' => 'google', 'count' => 34, 'icon' => 'bi-google', 'logo' => null, 'brand_meta' => Brand::getBrandColorMeta('google')],
+                ['name' => 'OnePlus', 'slug' => 'oneplus', 'count' => 45, 'icon' => 'bi-phone', 'logo' => null, 'brand_meta' => Brand::getBrandColorMeta('oneplus')],
+                ['name' => 'Motorola', 'slug' => 'motorola', 'count' => 62, 'icon' => 'bi-phone', 'logo' => null, 'brand_meta' => Brand::getBrandColorMeta('motorola')],
             ];
         }
 
@@ -247,13 +248,14 @@ class PublicPageController extends Controller
                     'founded' => 'Verified Manufacturer',
                     'logo' => $b->logo_url,
                     'short_description' => $b->short_description,
+                    'brand_meta' => Brand::getBrandColorMeta($b->slug),
                 ];
             })->toArray();
         } else {
             $brands = [
-                ['name' => 'Samsung', 'slug' => 'samsung', 'count' => 0, 'origin' => 'South Korea', 'founded' => 1938, 'logo' => null, 'short_description' => 'Global electronics leader.'],
-                ['name' => 'Apple', 'slug' => 'apple', 'count' => 0, 'origin' => 'United States', 'founded' => 1976, 'logo' => null, 'short_description' => 'Creator of iPhone and iOS.'],
-                ['name' => 'Xiaomi', 'slug' => 'xiaomi', 'count' => 0, 'origin' => 'China', 'founded' => 2010, 'logo' => null, 'short_description' => 'Hyper-charge and Leica mobile imaging.'],
+                ['name' => 'Samsung', 'slug' => 'samsung', 'count' => 0, 'origin' => 'South Korea', 'founded' => 1938, 'logo' => null, 'short_description' => 'Global electronics leader.', 'brand_meta' => Brand::getBrandColorMeta('samsung')],
+                ['name' => 'Apple', 'slug' => 'apple', 'count' => 0, 'origin' => 'United States', 'founded' => 1976, 'logo' => null, 'short_description' => 'Creator of iPhone and iOS.', 'brand_meta' => Brand::getBrandColorMeta('apple')],
+                ['name' => 'Xiaomi', 'slug' => 'xiaomi', 'count' => 0, 'origin' => 'China', 'founded' => 2010, 'logo' => null, 'short_description' => 'Hyper-charge and Leica mobile imaging.', 'brand_meta' => Brand::getBrandColorMeta('xiaomi')],
             ];
         }
 

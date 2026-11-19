@@ -26,25 +26,28 @@
 
     <div class="row g-4" id="brandsGrid">
         @foreach($brands as $brand)
+        @php
+            $meta = $brand['brand_meta'] ?? \App\Models\Brand::getBrandColorMeta($brand['slug']);
+        @endphp
         <div class="col-12 col-md-6 col-lg-4 brand-item" data-name="{{ strtolower($brand['name']) }}">
-            <div class="mrh-card p-4 h-100 d-flex flex-column">
+            <div class="mrh-card mrh-brand-card p-4 h-100 d-flex flex-column" style="--brand-color: {{ $meta['color'] }}; --brand-bg: {{ $meta['bg'] }}; --brand-border: {{ $meta['border'] }};">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     @if(!empty($brand['logo']))
-                        <div class="p-1 rounded border bg-white d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <div class="p-1 rounded border d-flex align-items-center justify-content-center shadow-sm" style="width: 52px; height: 52px; background: {{ $meta['bg'] }}; border-color: {{ $meta['border'] }} !important;">
                             <img src="{{ $brand['logo'] }}" alt="{{ $brand['name'] }}" style="max-width: 100%; max-height: 100%; object-fit: contain;" loading="lazy">
                         </div>
                     @else
-                        <div class="brand-icon-box" style="width: 48px; height: 48px;">
-                            <i class="bi bi-phone"></i>
+                        <div class="brand-icon-box" style="width: 52px; height: 52px; background: {{ $meta['bg'] }}; border-color: {{ $meta['border'] }}; color: {{ $meta['color'] }};">
+                            <i class="bi bi-phone" style="font-size: 1.4rem;"></i>
                         </div>
                     @endif
                     <div>
                         <h5 class="fw-bold mb-0">
-                            <a href="{{ url('/brands/' . $brand['slug']) }}" class="text-body text-decoration-none">
+                            <a href="{{ url('/brands/' . $brand['slug']) }}" class="text-body text-decoration-none brand-title-text">
                                 {{ $brand['name'] }}
                             </a>
                         </h5>
-                        <span class="small text-muted">{{ $brand['origin'] }}</span>
+                        <span class="badge rounded-pill border small" style="background: {{ $meta['bg'] }}; color: {{ $meta['color'] }}; border-color: {{ $meta['border'] }} !important;">{{ $brand['origin'] }}</span>
                     </div>
                 </div>
 
@@ -55,8 +58,8 @@
                 @endif
 
                 <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-auto">
-                    <span class="small text-muted"><strong>{{ $brand['count'] }}</strong> Devices Cataloged</span>
-                    <a href="{{ url('/brands/' . $brand['slug']) }}" class="btn btn-sm btn-outline-primary rounded-pill">
+                    <span class="small text-muted"><strong>{{ $brand['count'] }}</strong> Devices</span>
+                    <a href="{{ url('/brands/' . $brand['slug']) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold">
                         View Devices &rarr;
                     </a>
                 </div>

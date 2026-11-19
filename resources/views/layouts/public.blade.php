@@ -1,4 +1,25 @@
 <!DOCTYPE html>
+@php
+    try {
+        $pubLogoUrl = \App\Models\SiteSetting::getLogoUrl();
+        $pubLogoDarkUrl = \App\Models\SiteSetting::getLogoDarkUrl();
+        $pubLogoWidth = \App\Models\SiteSetting::getLogoWidth();
+        $pubLogoHeight = \App\Models\SiteSetting::getLogoHeight();
+        $pubFaviconUrl = \App\Models\SiteSetting::getFaviconUrl();
+        $pubSiteName = \App\Models\SiteSetting::getSiteName();
+        $whatsappUrl = \App\Models\SiteSetting::getWhatsAppUrl();
+        $whatsappHeaderEnabled = \App\Models\SiteSetting::isWhatsAppHeaderEnabled();
+    } catch (\Throwable $e) {
+        $pubLogoUrl = null;
+        $pubLogoDarkUrl = null;
+        $pubLogoWidth = 140;
+        $pubLogoHeight = 36;
+        $pubFaviconUrl = asset('favicon.ico');
+        $pubSiteName = 'Mobile Resource Hub';
+        $whatsappUrl = null;
+        $whatsappHeaderEnabled = false;
+    }
+@endphp
 <html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +29,7 @@
     <title>@yield('title', 'Mobile Resource Hub — Phone Specs, Firmware, Drivers & Guides')</title>
     <meta name="description" content="@yield('meta_description', 'Discover verified mobile phone specifications, firmware releases, official flash files, USB drivers, and in-depth repair tutorials.')">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
+    <link rel="icon" type="image/x-icon" href="{{ $pubFaviconUrl }}">
     @hasSection('robots')
     <meta name="robots" content="@yield('robots')">
     @endif
@@ -74,15 +96,24 @@
     <header class="glass-header-wrapper">
         <div class="container-xl">
             <nav class="navbar navbar-expand-lg glass-navbar" aria-label="Main Navigation">
-                <a class="navbar-brand navbar-brand-logo" href="{{ url('/') }}">
-                    <div class="brand-icon-box">
-                        <i class="bi bi-phone-flip"></i>
-                    </div>
-                    <span>Mobile<span class="text-primary">Hub</span></span>
+                <a class="navbar-brand navbar-brand-logo d-flex align-items-center gap-2" href="{{ url('/') }}">
+                    @if($pubLogoUrl)
+                        <img src="{{ $pubLogoUrl }}" alt="{{ $pubSiteName }}" style="max-height: {{ $pubLogoHeight }}px; max-width: {{ $pubLogoWidth }}px; width: auto; object-fit: contain;">
+                    @else
+                        <div class="brand-icon-box">
+                            <i class="bi bi-phone-flip"></i>
+                        </div>
+                        <span>Mobile<span class="text-primary">Hub</span></span>
+                    @endif
                 </a>
 
-                <!-- Mobile Header Right Actions (Search & Theme Toggle) -->
+                <!-- Mobile Header Right Actions (Search, WhatsApp & Theme Toggle) -->
                 <div class="d-flex align-items-center gap-2 d-lg-none ms-auto me-2">
+                    @if($whatsappUrl && $whatsappHeaderEnabled)
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success rounded-circle" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: #25D366; border-color: rgba(37, 211, 102, 0.45);" title="Chat on WhatsApp" aria-label="WhatsApp Support">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
+                    @endif
                     <a href="{{ url('/search') }}" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;" aria-label="Search">
                         <i class="bi bi-search"></i>
                     </a>
@@ -134,6 +165,14 @@
                         <div class="search-suggestions-panel"></div>
                     </div>
 
+                    <!-- Optional Compact Header WhatsApp Link -->
+                    @if($whatsappUrl && $whatsappHeaderEnabled)
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success rounded-pill d-inline-flex align-items-center gap-1 px-3 me-2" style="border-color: rgba(37, 211, 102, 0.5); color: #20ba5a; font-weight: 600;" title="Chat with Support on WhatsApp">
+                        <i class="bi bi-whatsapp"></i>
+                        <span class="small">WhatsApp</span>
+                    </a>
+                    @endif
+
                     <!-- Theme Switcher Button -->
                     <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle color theme" aria-label="Toggle theme">
                         <i class="bi bi-moon-stars-fill text-primary" id="theme-toggle-icon"></i>
@@ -147,15 +186,27 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileNavOffcanvas" aria-labelledby="mobileNavLabel">
         <div class="offcanvas-header border-bottom">
             <h5 class="offcanvas-title d-flex align-items-center gap-2" id="mobileNavLabel">
-                <div class="brand-icon-box" style="width: 32px; height: 32px; font-size: 1rem;">
-                    <i class="bi bi-phone-flip"></i>
-                </div>
-                <span>Mobile<span class="text-primary">Hub</span></span>
+                @if($pubLogoUrl)
+                    <img src="{{ $pubLogoUrl }}" alt="{{ $pubSiteName }}" style="max-height: 28px; max-width: 120px; object-fit: contain;">
+                @else
+                    <div class="brand-icon-box" style="width: 32px; height: 32px; font-size: 1rem;">
+                        <i class="bi bi-phone-flip"></i>
+                    </div>
+                    <span>Mobile<span class="text-primary">Hub</span></span>
+                @endif
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-4 d-flex flex-column justify-content-between">
             <div>
+                @if($whatsappUrl)
+                <div class="mb-3">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-success w-100 rounded-pill d-flex align-items-center justify-content-center gap-2 py-2 fw-semibold shadow-sm" style="background-color: #25D366; border-color: #25D366;">
+                        <i class="bi bi-whatsapp fs-5"></i>
+                        <span>Contact WhatsApp Support</span>
+                    </a>
+                </div>
+                @endif
                 <!-- Mobile Search -->
                 <form action="{{ url('/search') }}" method="GET" class="mb-4">
                     <div class="input-group">
@@ -238,10 +289,14 @@
             <div class="row g-4 mb-4">
                 <div class="col-lg-4 col-md-6">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <div class="brand-icon-box" style="width: 32px; height: 32px; font-size: 1rem;">
-                            <i class="bi bi-phone-flip"></i>
-                        </div>
-                        <span class="fs-5 fw-bold">Mobile<span class="text-primary">Hub</span></span>
+                        @if($pubLogoUrl)
+                            <img src="{{ $pubLogoUrl }}" alt="{{ $pubSiteName }}" style="max-height: 32px; max-width: 140px; object-fit: contain;">
+                        @else
+                            <div class="brand-icon-box" style="width: 32px; height: 32px; font-size: 1rem;">
+                                <i class="bi bi-phone-flip"></i>
+                            </div>
+                            <span class="fs-5 fw-bold">Mobile<span class="text-primary">Hub</span></span>
+                        @endif
                     </div>
                     <p class="text-muted small pe-lg-4">
                         Mobile Resource Hub is a comprehensive database of verified mobile phone technical specifications, official firmware releases, flash files, USB drivers, and step-by-step repair guides.
@@ -316,15 +371,8 @@
     </footer>
 
     <!-- Floating WhatsApp Support Button -->
-    @php
-        try {
-            $whatsappUrl = \App\Models\SiteSetting::getWhatsAppUrl();
-        } catch (\Throwable $e) {
-            $whatsappUrl = null;
-        }
-    @endphp
     @if($whatsappUrl)
-    <aside aria-label="Support">
+    <aside aria-label="WhatsApp Support">
         <a 
             href="{{ $whatsappUrl }}" 
             target="_blank" 
@@ -334,6 +382,7 @@
             title="Chat with Mobile Resource Hub Support on WhatsApp"
             aria-label="Chat with Support on WhatsApp"
         >
+            <span class="mrh-whatsapp-pulse" aria-hidden="true"></span>
             <i class="bi bi-whatsapp"></i>
             <span class="mrh-whatsapp-label">WhatsApp Support</span>
         </a>

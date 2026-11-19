@@ -15,14 +15,17 @@
     </nav>
 
     <!-- Brand Header -->
-    <div class="mrh-card p-4 mb-4">
+    @php
+        $meta = \App\Models\Brand::getBrandColorMeta($brandSlug);
+    @endphp
+    <div class="mrh-card p-4 mb-4 position-relative overflow-hidden" style="border-left: 4px solid {{ $meta['color'] }};">
         <div class="d-flex flex-wrap align-items-center gap-4">
             @if(isset($brand) && $brand->logo)
-                <div class="p-2 bg-white rounded border d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                <div class="p-2 bg-white rounded border d-flex align-items-center justify-content-center shadow-sm" style="width: 80px; height: 80px; border-color: {{ $meta['border'] }} !important;">
                     <img src="{{ $brand->logo_url }}" alt="{{ $brandName }}" style="max-width: 100%; max-height: 100%; object-fit: contain;" loading="lazy">
                 </div>
             @else
-                <div class="brand-icon-box" style="width: 72px; height: 72px; font-size: 2.5rem;">
+                <div class="brand-icon-box" style="width: 72px; height: 72px; font-size: 2.5rem; background: {{ $meta['bg'] }}; border: 1px solid {{ $meta['border'] }}; color: {{ $meta['color'] }};">
                     <i class="bi bi-phone"></i>
                 </div>
             @endif
@@ -30,14 +33,14 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <h1 class="h2 fw-bold mb-0">{{ $brandName }} Smartphones & Resources</h1>
                     @if(isset($brand) && $brand->country_of_origin)
-                        <span class="badge bg-secondary-subtle text-secondary border">{{ $brand->country_of_origin }}</span>
+                        <span class="badge border small" style="background: {{ $meta['bg'] }}; color: {{ $meta['color'] }}; border-color: {{ $meta['border'] }} !important;">{{ $brand->country_of_origin }}</span>
                     @endif
                 </div>
                 <p class="text-muted small mb-3">
                     {{ isset($brand) && $brand->short_description ? $brand->short_description : 'Verified technical device database and download archives for ' . $brandName . '.' }}
                 </p>
                 <div class="d-flex flex-wrap gap-2">
-                    <a href="{{ url('/mobile-phones?brand=' . $brandSlug) }}" class="btn btn-sm btn-primary rounded-pill">
+                    <a href="{{ url('/mobile-phones?brand=' . $brandSlug) }}" class="btn btn-sm btn-primary rounded-pill fw-semibold">
                         <i class="bi bi-phone me-1"></i> Browse {{ $brandName }} Phones
                     </a>
                     @if(isset($brand) && $brand->website_url)
@@ -45,7 +48,7 @@
                             <i class="bi bi-globe me-1"></i> Official Website
                         </a>
                     @endif
-                    <a href="{{ url('/firmware?search=' . $brandSlug) }}" class="btn btn-sm btn-outline-warning text-body rounded-pill">
+                    <a href="{{ url('/firmware?search=' . $brandSlug) }}" class="btn btn-sm btn-outline-success rounded-pill fw-semibold" style="border-color: rgba(16, 185, 129, 0.4); color: #059669;">
                         <i class="bi bi-cpu me-1"></i> Firmware Archive
                     </a>
                 </div>

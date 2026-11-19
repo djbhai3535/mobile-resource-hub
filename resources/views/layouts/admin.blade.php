@@ -20,6 +20,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ \App\Models\SiteSetting::getFaviconUrl() }}">
+
     <!-- Compiled Assets via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -35,13 +38,21 @@
         <!-- Sidebar Brand Header -->
         <div class="sidebar-brand-wrapper">
             <a href="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none">
-                <div class="brand-badge-lumzy">
-                    <i class="bi bi-cpu-fill"></i>
-                </div>
-                <div class="sidebar-brand-text">
-                    <span class="fw-bold fs-6 text-body">Mobile<span class="text-primary">Hub</span></span>
-                    <span class="d-block text-muted" style="font-size: 0.68rem; font-weight: 500; letter-spacing: 0.02em;">Admin Portal</span>
-                </div>
+                @php
+                    $adminCustomLogo = \App\Models\SiteSetting::getLogoUrl();
+                    $adminSiteName = \App\Models\SiteSetting::getSiteName();
+                @endphp
+                @if($adminCustomLogo)
+                    <img src="{{ $adminCustomLogo }}" alt="{{ $adminSiteName }}" style="max-height: 32px; max-width: 130px; object-fit: contain;">
+                @else
+                    <div class="brand-badge-lumzy">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                    <div class="sidebar-brand-text">
+                        <span class="fw-bold fs-6 text-body">Mobile<span class="text-primary">Hub</span></span>
+                        <span class="d-block text-muted" style="font-size: 0.68rem; font-weight: 500; letter-spacing: 0.02em;">Admin Portal</span>
+                    </div>
+                @endif
             </a>
             <button class="sidebar-collapse-toggle d-none d-lg-flex" id="desktopSidebarToggle" title="Toggle Sidebar (Expand/Collapse)" aria-label="Toggle Sidebar">
                 <i class="bi bi-layout-sidebar-inset"></i>
@@ -162,6 +173,10 @@
             <a href="{{ route('admin.theme.index') }}" class="admin-nav-link {{ request()->routeIs('admin.theme.*') ? 'active' : '' }}" title="Theme Customizer">
                 <i class="bi bi-palette2"></i>
                 <span class="sidebar-hide-collapsed">Theme Settings</span>
+            </a>
+            <a href="{{ route('admin.settings.branding') }}" class="admin-nav-link {{ request()->routeIs('admin.settings.branding*') ? 'active' : '' }}" title="Website Logo & Branding Settings">
+                <i class="bi bi-image"></i>
+                <span class="sidebar-hide-collapsed">Logo &amp; Branding</span>
             </a>
             <a href="{{ route('admin.settings.whatsapp') }}" class="admin-nav-link {{ request()->routeIs('admin.settings.whatsapp*') ? 'active' : '' }}" title="WhatsApp Support Settings">
                 <i class="bi bi-whatsapp text-success"></i>
@@ -338,6 +353,11 @@
                         <li class="px-2 py-2 border-bottom mb-1">
                             <div class="small fw-bold text-body">{{ Auth::user()->name }}</div>
                             <div class="small text-muted" style="font-size: 0.75rem;">{{ Auth::user()->email }}</div>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 rounded" href="{{ route('admin.settings.branding') }}">
+                                <i class="bi bi-image me-2 text-primary"></i> Logo &amp; Branding
+                            </a>
                         </li>
                         <li>
                             <a class="dropdown-item py-2 rounded" href="{{ route('admin.settings.whatsapp') }}">

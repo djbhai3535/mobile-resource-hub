@@ -43,14 +43,24 @@
                     <div class="search-suggestions-panel text-start"></div>
                 </div>
 
-                <!-- Quick Trending Pills -->
+                <!-- Quick Trending Pills with Authentic Tech Accents -->
                 <div class="d-flex flex-wrap justify-content-center justify-content-lg-start align-items-center gap-2 small mb-4">
                     <span class="text-muted fw-semibold">Popular searches:</span>
-                    <a href="{{ url('/search?q=Galaxy+S24+Ultra') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Galaxy S24 Ultra</a>
-                    <a href="{{ url('/search?q=SM-S928B') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">SM-S928B</a>
-                    <a href="{{ url('/search?q=Odin+3.14') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Odin 3.14</a>
-                    <a href="{{ url('/search?q=Qualcomm+Driver') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Qualcomm Driver</a>
-                    <a href="{{ url('/search?q=HyperOS+2.0') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">HyperOS 2.0</a>
+                    <a href="{{ url('/search?q=Galaxy+S24+Ultra') }}" class="badge tech-pill tech-pill-samsung text-decoration-none px-3 py-2 rounded-pill">
+                        <i class="bi bi-phone me-1"></i> Galaxy S24 Ultra
+                    </a>
+                    <a href="{{ url('/search?q=SM-S928B') }}" class="badge tech-pill tech-pill-cyan text-decoration-none px-3 py-2 rounded-pill">
+                        <i class="bi bi-cpu me-1"></i> SM-S928B
+                    </a>
+                    <a href="{{ url('/search?q=Odin+3.14') }}" class="badge tech-pill tech-pill-amber text-decoration-none px-3 py-2 rounded-pill">
+                        <i class="bi bi-tools me-1"></i> Odin 3.14
+                    </a>
+                    <a href="{{ url('/search?q=Qualcomm+Driver') }}" class="badge tech-pill tech-pill-violet text-decoration-none px-3 py-2 rounded-pill">
+                        <i class="bi bi-usb-symbol me-1"></i> Qualcomm Driver
+                    </a>
+                    <a href="{{ url('/search?q=HyperOS+2.0') }}" class="badge tech-pill tech-pill-xiaomi text-decoration-none px-3 py-2 rounded-pill">
+                        <i class="bi bi-lightning-charge me-1"></i> HyperOS 2.0
+                    </a>
                 </div>
 
                 <!-- Live Visitor Statistics Widget (Genuine Real-Time Aggregate Metrics) -->
@@ -169,12 +179,19 @@
 
         <div class="row g-3">
             @foreach($popularBrands as $brand)
+            @php
+                $meta = $brand['brand_meta'] ?? \App\Models\Brand::getBrandColorMeta($brand['slug']);
+            @endphp
             <div class="col-6 col-md-4 col-lg-2">
-                <a href="{{ url('/brands/' . $brand['slug']) }}" class="mrh-card p-3 text-center text-decoration-none">
-                    <div class="brand-icon-box mx-auto mb-2" style="width: 44px; height: 44px;">
-                        <i class="bi {{ $brand['icon'] }}"></i>
+                <a href="{{ url('/brands/' . $brand['slug']) }}" class="mrh-card mrh-brand-card p-3 text-center text-decoration-none h-100 d-flex flex-column justify-content-center" style="--brand-color: {{ $meta['color'] }}; --brand-bg: {{ $meta['bg'] }}; --brand-border: {{ $meta['border'] }};">
+                    <div class="brand-icon-box mx-auto mb-2" style="width: 48px; height: 48px; background: {{ $meta['bg'] }}; color: {{ $meta['color'] }}; border: 1px solid {{ $meta['border'] }};">
+                        @if(!empty($brand['logo']))
+                            <img src="{{ $brand['logo'] }}" alt="{{ $brand['name'] }}" style="max-width: 28px; max-height: 28px; object-fit: contain;">
+                        @else
+                            <i class="bi {{ $brand['icon'] }}" style="font-size: 1.35rem;"></i>
+                        @endif
                     </div>
-                    <h6 class="fw-bold mb-1 text-body">{{ $brand['name'] }}</h6>
+                    <h6 class="fw-bold mb-1 text-body brand-title-text">{{ $brand['name'] }}</h6>
                     <span class="small text-muted">{{ $brand['count'] }} Devices</span>
                 </a>
             </div>
@@ -255,11 +272,13 @@
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
-                <span class="text-warning fw-bold text-uppercase small">ROMs & Binaries</span>
+                <span class="badge px-3 py-1 rounded-pill fw-semibold mb-1" style="background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.28); font-size: 0.78rem;">
+                    <i class="bi bi-cpu me-1"></i> ROMs &amp; Binaries
+                </span>
                 <h2 class="h3 fw-bold mb-1">{{ $sections['latest_firmware']->title ?? 'Recent Firmware & Flash Files' }}</h2>
                 <p class="text-muted mb-0 small">{{ $sections['latest_firmware']->subtitle ?? 'Official manufacturer updates, service firmware, and CSC packages' }}</p>
             </div>
-            <a href="{{ url('/firmware') }}" class="btn btn-sm btn-outline-warning text-body rounded-pill px-3">
+            <a href="{{ url('/firmware') }}" class="btn btn-sm btn-tech-emerald rounded-pill px-3">
                 View Firmware Hub &rarr;
             </a>
         </div>
@@ -267,9 +286,11 @@
         <div class="row g-3">
             @foreach($recentFirmware as $fw)
             <div class="col-12 col-md-4">
-                <div class="mrh-card p-3">
+                <div class="mrh-card p-3 h-100 d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="mrh-badge mrh-badge-warning"><i class="bi bi-cpu"></i> Firmware</span>
+                        <span class="badge px-2 py-1 rounded-pill" style="background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.25);">
+                            <i class="bi bi-cpu me-1"></i> Firmware
+                        </span>
                         <span class="small text-muted">{{ $fw['date'] }}</span>
                     </div>
                     <h6 class="fw-bold mb-2">
@@ -277,14 +298,14 @@
                             {{ $fw['title'] }}
                         </a>
                     </h6>
-                    <div class="small text-muted mb-3">
+                    <div class="small text-muted mb-3 flex-grow-1">
                         <div><strong>Model:</strong> <code>{{ $fw['model_code'] }}</code></div>
                         <div><strong>Region / CSC:</strong> {{ $fw['region'] }}</div>
                         <div><strong>Build:</strong> <code>{{ $fw['build'] }}</code></div>
                         <div><strong>Archive Size:</strong> {{ $fw['size'] }}</div>
                     </div>
                     <div class="mt-auto">
-                        <a href="{{ url('/firmware/' . $fw['slug']) }}" class="btn btn-sm btn-outline-secondary w-100 rounded-pill">
+                        <a href="{{ url('/firmware/' . $fw['slug']) }}" class="btn btn-sm btn-outline-success w-100 rounded-pill fw-semibold">
                             <i class="bi bi-download me-1"></i> Download Details
                         </a>
                     </div>
@@ -303,25 +324,40 @@
             @if(!isset($sections['software_tools']) || $sections['software_tools']->is_enabled)
             <div class="col-12 col-md-6">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3 class="h4 fw-bold mb-0">{{ $sections['software_tools']->title ?? 'Essential Flash Tools' }}</h3>
-                    <a href="{{ url('/software') }}" class="small fw-bold">All Software &rarr;</a>
+                    <div>
+                        <span class="badge px-3 py-1 rounded-pill fw-semibold mb-1" style="background: rgba(245, 158, 11, 0.12); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.28); font-size: 0.78rem;">
+                            <i class="bi bi-tools me-1"></i> Flash Utilities
+                        </span>
+                        <h3 class="h4 fw-bold mb-0">{{ $sections['software_tools']->title ?? 'Essential Flash Tools' }}</h3>
+                    </div>
+                    <a href="{{ url('/software') }}" class="small fw-bold text-decoration-none" style="color: #d97706;">All Software &rarr;</a>
                 </div>
-                <div class="mrh-card p-3 mb-2">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-bold mb-1">Samsung Odin 3.14.4</h6>
-                            <span class="small text-muted">Official flashing tool for Galaxy devices (AP, BL, CP, CSC)</span>
+                <div class="mrh-card p-3 mb-3">
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="brand-icon-box flex-shrink-0" style="width: 44px; height: 44px; background: rgba(12, 77, 162, 0.1); color: #0c4da2; border-radius: 12px;">
+                                <i class="bi bi-lightning-charge-fill fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Samsung Odin 3.14.4</h6>
+                                <span class="small text-muted">Official flashing tool for Galaxy devices (AP, BL, CP, CSC)</span>
+                            </div>
                         </div>
-                        <a href="{{ url('/software/odin-3-14') }}" class="btn btn-sm btn-primary rounded-pill">Get Tool</a>
+                        <a href="{{ url('/software/odin-3-14') }}" class="btn btn-sm btn-tech-amber rounded-pill text-nowrap px-3">Get Tool</a>
                     </div>
                 </div>
                 <div class="mrh-card p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-bold mb-1">SP Flash Tool (Smart Phone Flash Tool)</h6>
-                            <span class="small text-muted">MediaTek MTK chipset firmware flashing & unbricking utility</span>
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="brand-icon-box flex-shrink-0" style="width: 44px; height: 44px; background: rgba(255, 103, 0, 0.1); color: #ff6700; border-radius: 12px;">
+                                <i class="bi bi-motherboard-fill fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">SP Flash Tool (MTK)</h6>
+                                <span class="small text-muted">MediaTek chipset firmware flashing &amp; unbricking utility</span>
+                            </div>
                         </div>
-                        <a href="{{ url('/software/sp-flash-tool') }}" class="btn btn-sm btn-primary rounded-pill">Get Tool</a>
+                        <a href="{{ url('/software/sp-flash-tool') }}" class="btn btn-sm btn-tech-amber rounded-pill text-nowrap px-3">Get Tool</a>
                     </div>
                 </div>
             </div>
@@ -330,25 +366,40 @@
             @if(!isset($sections['usb_drivers']) || $sections['usb_drivers']->is_enabled)
             <div class="col-12 col-md-6">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3 class="h4 fw-bold mb-0">{{ $sections['usb_drivers']->title ?? 'Official USB Drivers' }}</h3>
-                    <a href="{{ url('/drivers') }}" class="small fw-bold">All Drivers &rarr;</a>
+                    <div>
+                        <span class="badge px-3 py-1 rounded-pill fw-semibold mb-1" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.28); font-size: 0.78rem;">
+                            <i class="bi bi-usb-symbol me-1"></i> Certified Drivers
+                        </span>
+                        <h3 class="h4 fw-bold mb-0">{{ $sections['usb_drivers']->title ?? 'Official USB Drivers' }}</h3>
+                    </div>
+                    <a href="{{ url('/drivers') }}" class="small fw-bold text-decoration-none" style="color: #7c3aed;">All Drivers &rarr;</a>
                 </div>
-                <div class="mrh-card p-3 mb-2">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-bold mb-1">Qualcomm HS-USB QDLoader 9008 Driver</h6>
-                            <span class="small text-muted">Emergency Download (EDL) mode Windows x64/x86 driver</span>
+                <div class="mrh-card p-3 mb-3">
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="brand-icon-box flex-shrink-0" style="width: 44px; height: 44px; background: rgba(124, 58, 237, 0.1); color: #7c3aed; border-radius: 12px;">
+                                <i class="bi bi-cpu-fill fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Qualcomm HS-USB QDLoader 9008</h6>
+                                <span class="small text-muted">Emergency Download (EDL) mode Windows x64/x86 driver</span>
+                            </div>
                         </div>
-                        <a href="{{ url('/drivers/qualcomm-usb-driver') }}" class="btn btn-sm btn-outline-primary rounded-pill">Download</a>
+                        <a href="{{ url('/drivers/qualcomm-usb-driver') }}" class="btn btn-sm btn-tech-violet rounded-pill text-nowrap px-3">Download</a>
                     </div>
                 </div>
                 <div class="mrh-card p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-bold mb-1">Samsung Android USB Driver v1.7.59</h6>
-                            <span class="small text-muted">Windows ADB & Fastboot connectivity for all Samsung phones</span>
+                    <div class="d-flex align-items-center justify-content-between gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="brand-icon-box flex-shrink-0" style="width: 44px; height: 44px; background: rgba(0, 129, 201, 0.1); color: #0081c9; border-radius: 12px;">
+                                <i class="bi bi-usb-symbol fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Samsung Android USB Driver v1.7.59</h6>
+                                <span class="small text-muted">Windows ADB &amp; Fastboot connectivity for Galaxy devices</span>
+                            </div>
                         </div>
-                        <a href="{{ url('/drivers/samsung-usb-driver') }}" class="btn btn-sm btn-outline-primary rounded-pill">Download</a>
+                        <a href="{{ url('/drivers/samsung-usb-driver') }}" class="btn btn-sm btn-tech-cyan rounded-pill text-nowrap px-3">Download</a>
                     </div>
                 </div>
             </div>
@@ -363,11 +414,13 @@
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-end mb-4">
             <div>
-                <span class="text-success fw-bold text-uppercase small">Knowledge Base</span>
+                <span class="badge px-3 py-1 rounded-pill fw-semibold mb-1" style="background: rgba(244, 63, 94, 0.12); color: #e11d48; border: 1px solid rgba(244, 63, 94, 0.28); font-size: 0.78rem;">
+                    <i class="bi bi-journal-code me-1"></i> Knowledge Base
+                </span>
                 <h2 class="h3 fw-bold mb-1">{{ $sections['tech_news']->title ?? 'Guides, Fixes & Tech News' }}</h2>
                 <p class="text-muted mb-0 small">{{ $sections['tech_news']->subtitle ?? 'Curated step-by-step guides for flashing, driver troubleshooting, and mobile repairs' }}</p>
             </div>
-            <a href="{{ url('/tutorials') }}" class="btn btn-sm btn-outline-success text-body rounded-pill px-3">
+            <a href="{{ url('/tutorials') }}" class="btn btn-sm btn-tech-rose rounded-pill px-3">
                 Browse Guides &rarr;
             </a>
         </div>

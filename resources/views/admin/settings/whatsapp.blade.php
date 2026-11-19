@@ -21,7 +21,7 @@
                 @csrf
 
                 <!-- Enable / Disable Toggle -->
-                <div class="form-check form-switch mb-4 p-3 bg-body-tertiary rounded-3 border">
+                <div class="form-check form-switch mb-3 p-3 bg-body-tertiary rounded-3 border">
                     <input 
                         class="form-check-input ms-0 me-3" 
                         type="checkbox" 
@@ -36,7 +36,27 @@
                         Enable Floating WhatsApp Button on Public Website
                     </label>
                     <div class="text-muted small ps-5">
-                        When enabled, a responsive floating WhatsApp icon appears on all public pages, allowing visitors to contact support directly.
+                        When enabled, a responsive floating WhatsApp icon appears in the bottom-right corner of all public pages, allowing visitors to contact support directly.
+                    </div>
+                </div>
+
+                <!-- Header Link Toggle -->
+                <div class="form-check form-switch mb-4 p-3 bg-body-tertiary rounded-3 border">
+                    <input 
+                        class="form-check-input ms-0 me-3" 
+                        type="checkbox" 
+                        role="switch" 
+                        name="whatsapp_show_header" 
+                        id="whatsapp_show_header" 
+                        value="1" 
+                        {{ old('whatsapp_show_header', $showHeader ?? true) ? 'checked' : '' }}
+                        style="width: 2.8em; height: 1.4em;"
+                    >
+                    <label class="form-check-label fw-bold" for="whatsapp_show_header">
+                        Display Compact WhatsApp Contact Link in Top Header Navbar
+                    </label>
+                    <div class="text-muted small ps-5">
+                        Also display a compact WhatsApp button in the desktop top navigation bar and mobile offcanvas menu for instant visibility.
                     </div>
                 </div>
 
