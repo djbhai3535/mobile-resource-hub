@@ -25,7 +25,7 @@
 
     @stack('styles')
 </head>
-<body class="d-flex admin-body">
+<body class="d-flex flex-row admin-body">
 
     <!-- Mobile Drawer Backdrop -->
     <div class="admin-sidebar-backdrop" id="sidebarBackdrop"></div>
