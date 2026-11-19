@@ -53,10 +53,12 @@ class DashboardController extends Controller
             'published_drivers' => Driver::where('status', 'published')->count(),
             'total_download_requests' => DownloadRequest::count(),
             'total_mirrors' => DownloadMirror::count(),
+            'total_ads' => class_exists(\App\Models\Advertisement::class) ? \App\Models\Advertisement::count() : 0,
+            'active_ads' => class_exists(\App\Models\Advertisement::class) ? \App\Models\Advertisement::where('is_active', true)->count() : 0,
         ];
 
         // Format storage bytes
-        $bytes = $metrics['media_storage_bytes'];
+        $bytes = $metrics['media_storage_bytes'] ?? 0;
         if ($bytes >= 1048576) {
             $metrics['media_storage_formatted'] = number_format($bytes / 1048576, 2) . ' MB';
         } elseif ($bytes >= 1024) {
@@ -67,20 +69,26 @@ class DashboardController extends Controller
 
         // Recent devices
         $recentDevices = Device::with('brand')
-            ->latest()
+            ->latest('id')
+            ->take(6)
+            ->get();
+
+        // Recent firmware
+        $recentFirmwares = Firmware::with(['brand', 'device'])
+            ->latest('id')
             ->take(5)
             ->get();
 
         // Recent posts
         $recentPosts = Post::with(['author', 'category'])
-            ->latest()
+            ->latest('id')
             ->take(6)
             ->get();
 
         // Recent administrative activities
         $recentActivities = ActivityLog::with('user')
             ->latest('created_at')
-            ->take(10)
+            ->take(8)
             ->get();
 
         // Recent inquiries
@@ -91,6 +99,7 @@ class DashboardController extends Controller
         return view('admin.dashboard', compact(
             'metrics',
             'recentDevices',
+            'recentFirmwares',
             'recentPosts',
             'recentActivities',
             'recentMessages'
