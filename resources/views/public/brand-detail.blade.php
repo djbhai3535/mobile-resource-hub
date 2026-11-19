@@ -59,10 +59,19 @@
         @endif
     </div>
 
-    <!-- Published Devices for Brand -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="h5 fw-bold mb-0">Registered {{ $brandName }} Models</h3>
-        <span class="small text-muted">{{ $devices->total() }} Devices Cataloged</span>
+    <!-- Published Devices for Brand with In-Brand Filter -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h3 class="h5 fw-bold mb-0">Registered {{ $brandName }} Models</h3>
+            <span class="small text-muted">{{ $devices->total() }} Devices Cataloged</span>
+        </div>
+        <form action="{{ url('/brands/' . $brandSlug) }}" method="GET" class="d-flex gap-2" style="max-width: 320px;">
+            <input type="search" name="q" value="{{ request('q', request('search')) }}" class="form-control form-control-sm rounded-pill" placeholder="Filter {{ $brandName }} models...">
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">Filter</button>
+            @if(request('q') || request('search'))
+                <a href="{{ url('/brands/' . $brandSlug) }}" class="btn btn-sm btn-outline-secondary rounded-pill">Clear</a>
+            @endif
+        </form>
     </div>
 
     @if($devices->isEmpty())

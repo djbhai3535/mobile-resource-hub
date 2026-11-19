@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackVisitorMiddleware::class,
+        ]);
+
         $middleware->alias([
             'admin.auth' => EnsureAdminAuthenticated::class,
             'role' => EnsureUserHasRole::class,

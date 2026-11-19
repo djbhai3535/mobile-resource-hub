@@ -157,6 +157,9 @@ Route::middleware('admin.auth')->group(function () {
     Route::put('/menu-items/{item}', [MenuController::class, 'updateItem'])->name('menus.items.update');
     Route::delete('/menu-items/{item}', [MenuController::class, 'destroyItem'])->name('menus.items.destroy');
 
+    // Visitor Analytics
+    Route::get('/analytics/visitors', [\App\Http\Controllers\Admin\VisitorAnalyticsController::class, 'index'])->name('analytics.visitors');
+
     // Search Analytics & Index Management
     Route::get('/search-analytics', [SearchAnalyticsController::class, 'index'])->name('search-analytics.index');
     Route::post('/search-analytics/rebuild', [SearchAnalyticsController::class, 'rebuild'])->name('search-analytics.rebuild');

@@ -47,6 +47,7 @@ Route::get('/tutorials/{tutorial}', [PublicPageController::class, 'tutorialDetai
 
 // Global Search & Live Suggestions API
 Route::get('/search', [PublicPageController::class, 'search'])->name('search');
+Route::get('/api/analytics/live', [PublicPageController::class, 'liveAnalytics'])->name('analytics.live');
 Route::get('/api/search/suggestions', [PublicPageController::class, 'searchSuggestions'])->name('search.suggestions');
 
 // Static & Legal Pages

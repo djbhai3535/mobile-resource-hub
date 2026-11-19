@@ -4,53 +4,146 @@
 @section('meta_description', 'Search and discover verified mobile phone specifications, official firmware downloads, flash files, USB drivers, and step-by-step repair guides.')
 
 @section('content')
-<!-- Hero Section with Prominent Global Search (PUB-001, PUB-002) -->
+<!-- Hero Section with Prominent Global Search, Live Analytics & 3D Smartphone Showcase (PUB-001, PUB-002) -->
 <section class="py-5 py-lg-6 position-relative overflow-hidden">
-    <div class="container-xl text-center">
-        <div class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3 fw-semibold">
-            <i class="bi bi-shield-check me-1"></i> Verified Mobile Technology & Resource Portal
-        </div>
-        
-        <h1 class="display-4 fw-extrabold mb-3">
-            Search Specs, Firmware, & <span class="text-primary">Flash Resources</span>
-        </h1>
-        
-        <p class="lead text-muted mx-auto mb-4" style="max-width: 650px;">
-            The ultimate open database for smartphones, verified technical specifications, firmware builds, USB drivers, and certified flashing tutorials.
-        </p>
+    <div class="container-xl">
+        <div class="row align-items-center g-4 g-xl-5">
+            <!-- Left Hero Column: Identity, Search Bar, Popular Searches & Live Analytics -->
+            <div class="col-lg-7 text-center text-lg-start">
+                <div class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3 fw-semibold">
+                    <i class="bi bi-shield-check me-1"></i> Verified Mobile Technology &amp; Resource Portal
+                </div>
+                
+                <h1 class="display-4 fw-extrabold mb-3">
+                    Search Specs, Firmware, &amp; <span class="text-primary">Flash Resources</span>
+                </h1>
+                
+                <p class="lead text-muted mb-4" style="max-width: 620px;">
+                    The ultimate open database for smartphones, verified technical specifications, firmware builds, USB drivers, and certified flashing tutorials.
+                </p>
 
-        <!-- Prominent Hero Search Bar (PRD Section 6.3) -->
-        <div class="search-wrapper search-wrapper-hero mb-4">
-            <form action="{{ url('/search') }}" method="GET">
-                <i class="bi bi-search search-prefix-icon"></i>
-                <input 
-                    type="search" 
-                    name="q" 
-                    class="search-input-glass mrh-search-input" 
-                    placeholder="Search model (e.g. SM-S928B), brand, chipset, or firmware..." 
-                    autocomplete="off" 
-                    required 
-                    aria-label="Search mobile resources"
-                >
-                <button type="submit" class="btn btn-primary search-action-btn">
-                    <span>Search</span>
-                    <i class="bi bi-arrow-right"></i>
-                </button>
-            </form>
-            <div class="search-suggestions-panel text-start"></div>
-        </div>
+                <!-- Prominent Hero Search Bar (PRD Section 6.3) -->
+                <div class="search-wrapper search-wrapper-hero mb-4">
+                    <form action="{{ url('/search') }}" method="GET">
+                        <i class="bi bi-search search-prefix-icon"></i>
+                        <input 
+                            type="search" 
+                            name="q" 
+                            class="search-input-glass mrh-search-input" 
+                            placeholder="Search model (e.g. SM-S928B), brand, chipset, or firmware..." 
+                            autocomplete="off" 
+                            required 
+                            aria-label="Search mobile resources"
+                        >
+                        <button type="submit" class="btn btn-primary search-action-btn">
+                            <span>Search</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </form>
+                    <div class="search-suggestions-panel text-start"></div>
+                </div>
 
-        <!-- Quick Trending Pills -->
-        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 small">
-            <span class="text-muted fw-semibold">Popular searches:</span>
-            <a href="{{ url('/search?q=Galaxy+S24+Ultra') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Galaxy S24 Ultra</a>
-            <a href="{{ url('/search?q=SM-S928B') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">SM-S928B</a>
-            <a href="{{ url('/search?q=Odin+3.14') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Odin 3.14</a>
-            <a href="{{ url('/search?q=Qualcomm+Driver') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Qualcomm Driver</a>
-            <a href="{{ url('/search?q=HyperOS+2.0') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">HyperOS 2.0</a>
+                <!-- Quick Trending Pills -->
+                <div class="d-flex flex-wrap justify-content-center justify-content-lg-start align-items-center gap-2 small mb-4">
+                    <span class="text-muted fw-semibold">Popular searches:</span>
+                    <a href="{{ url('/search?q=Galaxy+S24+Ultra') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Galaxy S24 Ultra</a>
+                    <a href="{{ url('/search?q=SM-S928B') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">SM-S928B</a>
+                    <a href="{{ url('/search?q=Odin+3.14') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Odin 3.14</a>
+                    <a href="{{ url('/search?q=Qualcomm+Driver') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">Qualcomm Driver</a>
+                    <a href="{{ url('/search?q=HyperOS+2.0') }}" class="badge text-bg-light border text-decoration-none px-3 py-2 rounded-pill">HyperOS 2.0</a>
+                </div>
+
+                <!-- Live Visitor Statistics Widget (Genuine Real-Time Aggregate Metrics) -->
+                <div class="d-flex justify-content-center justify-content-lg-start">
+                    <div class="hero-visitor-stats-bar" id="heroVisitorStats" aria-label="Live platform visitor statistics">
+                        <div class="hero-stat-item">
+                            <span class="beacon-pulse" aria-hidden="true"></span>
+                            <span>Live Online:</span>
+                            <span class="hero-stat-value text-success" id="statLiveCount">{{ number_format($liveStats['live_visitors'] ?? 1) }}</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <i class="bi bi-people-fill text-primary" style="font-size: 0.85rem;"></i>
+                            <span>Today:</span>
+                            <span class="hero-stat-value" id="statTodayCount">{{ number_format($liveStats['today_visitors'] ?? 1) }}</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <i class="bi bi-calendar-check text-info" style="font-size: 0.85rem;"></i>
+                            <span>This Month:</span>
+                            <span class="hero-stat-value" id="statMonthCount">{{ number_format($liveStats['monthly_visitors'] ?? 1) }}</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <i class="bi bi-award-fill text-warning" style="font-size: 0.85rem;"></i>
+                            <span>Total Visitors:</span>
+                            <span class="hero-stat-value" id="statTotalCount">{{ number_format($liveStats['total_visitors'] ?? 1) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Hero Column: Premium 3D Animated Smartphone Showcase -->
+            <div class="col-lg-5 d-flex align-items-center justify-content-center">
+                <x-smartphone-3d-hero />
+            </div>
         </div>
     </div>
 </section>
+
+<!-- Client Script for Smooth Counter Animation & Real-Time Polling -->
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Smooth Number Counter on Initial Load
+        function animateValue(element, start, end, duration) {
+            if (!element) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentVal = Math.floor(progress * (end - start) + start);
+                element.textContent = currentVal.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    element.textContent = end.toLocaleString();
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        const statLive = document.getElementById('statLiveCount');
+        const statToday = document.getElementById('statTodayCount');
+        const statMonth = document.getElementById('statMonthCount');
+        const statTotal = document.getElementById('statTotalCount');
+
+        if (statLive) animateValue(statLive, 1, parseInt('{{ $liveStats["live_visitors"] ?? 1 }}') || 1, 1000);
+        if (statToday) animateValue(statToday, 1, parseInt('{{ $liveStats["today_visitors"] ?? 1 }}') || 1, 1200);
+        if (statMonth) animateValue(statMonth, 1, parseInt('{{ $liveStats["monthly_visitors"] ?? 1 }}') || 1, 1400);
+        if (statTotal) animateValue(statTotal, 1, parseInt('{{ $liveStats["total_visitors"] ?? 1 }}') || 1, 1600);
+
+        // Polling interval (every 30 seconds) to refresh live counts smoothly
+        setInterval(function() {
+            fetch('/api/analytics/live')
+                .then(response => response.ok ? response.json() : null)
+                .then(data => {
+                    if (!data) return;
+                    if (statLive && data.live_visitors !== undefined) {
+                        statLive.textContent = parseInt(data.live_visitors).toLocaleString();
+                    }
+                    if (statToday && data.today_visitors !== undefined) {
+                        statToday.textContent = parseInt(data.today_visitors).toLocaleString();
+                    }
+                    if (statMonth && data.monthly_visitors !== undefined) {
+                        statMonth.textContent = parseInt(data.monthly_visitors).toLocaleString();
+                    }
+                    if (statTotal && data.total_visitors !== undefined) {
+                        statTotal.textContent = parseInt(data.total_visitors).toLocaleString();
+                    }
+                })
+                .catch(() => {});
+        }, 30000);
+    });
+</script>
+@endpush
 
 <!-- Configurable Advertisement Placeholder (PUB-008) -->
 <div class="container-xl my-2">

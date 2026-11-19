@@ -34,16 +34,28 @@
 
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label for="brand_id" class="form-label fw-semibold">Manufacturer / Brand <span class="text-danger">*</span></label>
-                        <select name="brand_id" id="brand_id" class="form-select @error('brand_id') is-invalid @enderror" required>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label for="brand_id" class="form-label fw-semibold mb-0">Manufacturer / Brand <span class="text-danger">*</span></label>
+                            <a href="{{ route('admin.brands.create') }}" target="_blank" class="small text-primary text-decoration-none fw-semibold">
+                                <i class="bi bi-plus-circle me-1"></i>+ New Brand
+                            </a>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="brandSearchInputEdit" 
+                            class="form-control form-control-sm mb-1" 
+                            placeholder="Type to filter brands..."
+                            autocomplete="off"
+                        >
+                        <select name="brand_id" id="brand_id" class="form-select @error('brand_id') is-invalid @enderror" required size="5" style="max-height: 140px;">
                             @foreach($brands as $brand)
-                                <option value="{{ $brand->id }}" {{ old('brand_id', $device->brand_id) == $brand->id ? 'selected' : '' }}>
-                                    {{ $brand->name }}
+                                <option value="{{ $brand->id }}" {{ (string)old('brand_id', $device->brand_id) === (string)$brand->id ? 'selected' : '' }}>
+                                    {{ $brand->name }} ({{ $brand->country_of_origin ?: 'Global' }})
                                 </option>
                             @endforeach
                         </select>
                         @error('brand_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -393,6 +405,20 @@
         tbody.appendChild(row);
         variantCount++;
     });
+
+    // Instant Brand Search Filter in Dropdown
+    const brandInputEdit = document.getElementById('brandSearchInputEdit');
+    const brandSelectEdit = document.getElementById('brand_id');
+    if (brandInputEdit && brandSelectEdit) {
+        brandInputEdit.addEventListener('input', function() {
+            const filter = this.value.toLowerCase().trim();
+            const options = brandSelectEdit.options;
+            for (let i = 0; i < options.length; i++) {
+                const text = options[i].text.toLowerCase();
+                options[i].style.display = text.includes(filter) ? '' : 'none';
+            }
+        });
+    }
 </script>
 @endpush
 @endsection

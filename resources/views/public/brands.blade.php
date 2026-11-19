@@ -13,17 +13,20 @@
         </ol>
     </nav>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h1 class="h3 fw-bold mb-1">Mobile Brand Directory</h1>
             <p class="text-muted small mb-0">Browse smartphones and resources indexed by hardware manufacturer</p>
         </div>
-        <span class="badge text-bg-light border px-3 py-2 rounded-pill">{{ count($brands) }} Brands Indexed</span>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" id="brandDirectorySearch" class="form-control form-control-sm rounded-pill" placeholder="Filter brands..." style="width: 220px;" autocomplete="off">
+            <span class="badge text-bg-light border px-3 py-2 rounded-pill text-nowrap">{{ count($brands) }} Brands Indexed</span>
+        </div>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4" id="brandsGrid">
         @foreach($brands as $brand)
-        <div class="col-12 col-md-6 col-lg-4">
+        <div class="col-12 col-md-6 col-lg-4 brand-item" data-name="{{ strtolower($brand['name']) }}">
             <div class="mrh-card p-4 h-100 d-flex flex-column">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     @if(!empty($brand['logo']))
@@ -62,4 +65,22 @@
         @endforeach
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('brandDirectorySearch');
+        const items = document.querySelectorAll('.brand-item');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const term = this.value.toLowerCase().trim();
+                items.forEach(function(el) {
+                    const name = el.getAttribute('data-name') || '';
+                    el.style.display = name.includes(term) ? '' : 'none';
+                });
+            });
+        }
+    });
+</script>
+@endpush
 @endsection

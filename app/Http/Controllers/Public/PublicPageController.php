@@ -13,6 +13,7 @@ use App\Models\SoftwareTool;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class PublicPageController extends Controller
 {
@@ -134,7 +135,9 @@ class PublicPageController extends Controller
             ],
         ];
 
-        return view('public.home', compact('popularBrands', 'latestDevices', 'recentFirmware', 'latestGuides', 'sections'));
+        $liveStats = app(\App\Services\VisitorAnalyticsService::class)->getLiveStats();
+
+        return view('public.home', compact('popularBrands', 'latestDevices', 'recentFirmware', 'latestGuides', 'sections', 'liveStats'));
     }
 
     /**
@@ -231,7 +234,7 @@ class PublicPageController extends Controller
      */
     public function brands(): View
     {
-        $dbBrands = Brand::published()->withCount('devices')->orderBy('sort_order')->orderBy('name')->get();
+        $dbBrands = Brand::published()->withCount(['devices' => fn($q) => $q->published()])->orderBy('sort_order')->orderBy('name')->get();
 
         if ($dbBrands->isNotEmpty()) {
             $brands = $dbBrands->map(function ($b) {
@@ -248,9 +251,9 @@ class PublicPageController extends Controller
             })->toArray();
         } else {
             $brands = [
-                ['name' => 'Samsung', 'slug' => 'samsung', 'count' => 142, 'origin' => 'South Korea', 'founded' => 1938, 'logo' => null, 'short_description' => 'Global electronics leader.'],
-                ['name' => 'Apple', 'slug' => 'apple', 'count' => 58, 'origin' => 'United States', 'founded' => 1976, 'logo' => null, 'short_description' => 'Creator of iPhone and iOS.'],
-                ['name' => 'Xiaomi', 'slug' => 'xiaomi', 'count' => 110, 'origin' => 'China', 'founded' => 2010, 'logo' => null, 'short_description' => 'Hyper-charge and Leica mobile imaging.'],
+                ['name' => 'Samsung', 'slug' => 'samsung', 'count' => 0, 'origin' => 'South Korea', 'founded' => 1938, 'logo' => null, 'short_description' => 'Global electronics leader.'],
+                ['name' => 'Apple', 'slug' => 'apple', 'count' => 0, 'origin' => 'United States', 'founded' => 1976, 'logo' => null, 'short_description' => 'Creator of iPhone and iOS.'],
+                ['name' => 'Xiaomi', 'slug' => 'xiaomi', 'count' => 0, 'origin' => 'China', 'founded' => 2010, 'logo' => null, 'short_description' => 'Hyper-charge and Leica mobile imaging.'],
             ];
         }
 
@@ -260,15 +263,40 @@ class PublicPageController extends Controller
     /**
      * Individual Brand Detail Page.
      */
-    public function brandDetail(string $brandSlug): View
+    public function brandDetail(Request $request, string $brandSlug): View
     {
-        $brand = Brand::published()->where('slug', $brandSlug)->withCount('devices')->first();
+        $brand = Brand::published()
+            ->where(function ($q) use ($brandSlug) {
+                $q->where('slug', $brandSlug)
+                    ->orWhere('slug', Str::slug($brandSlug));
+            })
+            ->withCount(['devices' => fn($q) => $q->published()])
+            ->first();
 
         if ($brand) {
             $brandName = $brand->name;
-            $devices = $brand->devices()->published()->with(['modelNumbers', 'variants'])->latest('release_date')->paginate(12);
+            $devicesQuery = $brand->devices()
+                ->published()
+                ->with(['modelNumbers', 'variants']);
+
+            if ($request->filled('q') || $request->filled('search')) {
+                $keyword = '%' . trim((string)$request->input('q', $request->input('search'))) . '%';
+                $devicesQuery->where(function ($q) use ($keyword) {
+                    $q->where('name', 'like', $keyword)
+                        ->orWhere('marketing_name', 'like', $keyword)
+                        ->orWhere('slug', 'like', $keyword)
+                        ->orWhereHas('modelNumbers', function ($mq) use ($keyword) {
+                            $mq->where('model_number', 'like', $keyword);
+                        });
+                });
+            }
+
+            $devices = $devicesQuery->latest('release_date')
+                ->latest('id')
+                ->paginate(12)
+                ->withQueryString();
         } else {
-            $brandName = ucfirst($brandSlug);
+            $brandName = ucwords(str_replace('-', ' ', $brandSlug));
             $devices = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12);
         }
 
@@ -601,6 +629,14 @@ class PublicPageController extends Controller
             'tabCounts' => $searchData['tab_counts'],
             'totalResults' => $searchData['total_results'],
         ]);
+    }
+
+    /**
+     * Live Visitor Analytics Stats JSON Endpoint.
+     */
+    public function liveAnalytics(\App\Services\VisitorAnalyticsService $analyticsService): JsonResponse
+    {
+        return response()->json($analyticsService->getLiveStats());
     }
 
     /**

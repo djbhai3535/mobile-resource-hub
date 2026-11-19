@@ -19,10 +19,15 @@ use App\Models\Post;
 use App\Models\SoftwareTool;
 use App\Models\SpecificationGroup;
 use App\Models\Tag;
+use App\Services\VisitorAnalyticsService;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        protected VisitorAnalyticsService $analyticsService
+    ) {}
+
     public function index(): View
     {
         // Actual database metrics
@@ -96,13 +101,19 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Real visitor analytics overview
+        $liveStats = $this->analyticsService->getLiveStats();
+        $visitorAnalytics = $this->analyticsService->getDashboardAnalytics('30d');
+
         return view('admin.dashboard', compact(
             'metrics',
             'recentDevices',
             'recentFirmwares',
             'recentPosts',
             'recentActivities',
-            'recentMessages'
+            'recentMessages',
+            'liveStats',
+            'visitorAnalytics'
         ));
     }
 }

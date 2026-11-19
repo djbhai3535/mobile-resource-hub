@@ -118,7 +118,7 @@ function fetchSuggestions(query, panel) {
 }
 
 function renderSuggestions(data, panel, query) {
-    if (!data || (!data.devices?.length && !data.firmware?.length && !data.software?.length && !data.posts?.length)) {
+    if (!data || (!data.brands?.length && !data.devices?.length && !data.firmware?.length && !data.flash_files?.length && !data.software?.length && !data.drivers?.length && !data.posts?.length)) {
         panel.innerHTML = `
             <div class="p-3 text-center text-muted">
                 <i class="bi bi-search me-1"></i> No immediate matches for "${escapeHtml(query)}"
@@ -133,6 +133,17 @@ function renderSuggestions(data, panel, query) {
     }
 
     let html = '';
+
+    if (data.brands?.length) {
+        html += `<div class="suggestion-group-title"><i class="bi bi-award me-1"></i> Brands</div>`;
+        data.brands.forEach(item => {
+            html += `
+                <a href="${item.url}" class="suggestion-item text-decoration-none">
+                    <span><strong>${escapeHtml(item.name)}</strong></span>
+                    <span class="mrh-badge mrh-badge-secondary">Brand</span>
+                </a>`;
+        });
+    }
 
     if (data.devices?.length) {
         html += `<div class="suggestion-group-title"><i class="bi bi-phone me-1"></i> Devices</div>`;

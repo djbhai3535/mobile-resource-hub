@@ -203,83 +203,66 @@
         <div class="lumzy-card p-4 mb-4">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
                 <div>
-                    <h5 class="fw-bold mb-1 text-body">Website Traffic &amp; Catalog Growth</h5>
-                    <p class="text-muted small mb-0">Platform resource velocity and visitor interaction trends.</p>
+                    <h5 class="fw-bold mb-1 text-body">Website Traffic &amp; Live Analytics</h5>
+                    <p class="text-muted small mb-0">Real visitor metrics, page views, and engagement growth.</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill small">
-                        <i class="bi bi-bar-chart-line me-1"></i> Analytics Engine — Reserved for Step 2
+                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill small">
+                        <span class="spinner-grow spinner-grow-sm me-1 text-success" role="status" style="width: 8px; height: 8px;"></span>
+                        {{ $liveStats['live_visitors'] ?? 1 }} Live Online
                     </span>
+                    <a href="{{ route('admin.analytics.visitors') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" style="font-size: 0.78rem;">
+                        Detailed Insights &rarr;
+                    </a>
                 </div>
             </div>
 
-            <!-- Visual Bar Chart Placeholder (Lumzy Lookalike with Real Database Resource Additions) -->
-            <div class="p-4 rounded-3 text-center mb-3" style="background: #F8FAFC; border: 1px dashed #CBD5E1;">
-                <div class="d-flex justify-content-between align-items-end" style="height: 180px; padding: 0 1rem;">
-                    <!-- Bar 1: June -->
-                    <div class="d-flex flex-column align-items-center gap-2 flex-grow-1">
-                        <div class="d-flex align-items-end gap-1" style="height: 140px;">
-                            <div class="rounded-top" style="width: 18px; height: 75px; background: #3B82F6;" title="Devices & ROMs"></div>
-                            <div class="rounded-top" style="width: 18px; height: 50px; background: #10B981;" title="Files & Drivers"></div>
-                        </div>
-                        <span class="small text-muted" style="font-size: 0.75rem;">Jun</span>
+            <!-- Visual Bar Chart with Real Analytics -->
+            <div class="p-3 rounded-3 mb-3" style="background: #F8FAFC; border: 1px solid #EAECF0;">
+                @if(isset($visitorAnalytics['daily_trend']) && count($visitorAnalytics['daily_trend']) > 0)
+                    @php
+                        $trendSlice = array_slice($visitorAnalytics['daily_trend'], -14);
+                        $maxVal = max(array_merge(
+                            array_column($trendSlice, 'views'),
+                            array_column($trendSlice, 'visitors'),
+                            [5]
+                        ));
+                    @endphp
+                    <div class="d-flex justify-content-between align-items-end" style="height: 160px; padding: 0 0.5rem; border-bottom: 2px solid #E2E8F0;">
+                        @foreach($trendSlice as $tDay)
+                            @php
+                                $vH = ($tDay['views'] / $maxVal) * 140;
+                                $uH = ($tDay['visitors'] / $maxVal) * 140;
+                            @endphp
+                            <div class="d-flex flex-column align-items-center flex-grow-1" style="min-width: 20px;" title="{{ $tDay['date'] }}: {{ $tDay['views'] }} views, {{ $tDay['visitors'] }} visitors">
+                                <div class="d-flex align-items-end gap-1 justify-content-center" style="height: 140px;">
+                                    <div class="rounded-top" style="width: 8px; height: {{ max($vH, 4) }}px; background: #2563EB;"></div>
+                                    <div class="rounded-top" style="width: 8px; height: {{ max($uH, 4) }}px; background: #10B981;"></div>
+                                </div>
+                                <span class="text-muted mt-2 text-center" style="font-size: 0.65rem;">{{ $tDay['label'] }}</span>
+                            </div>
+                        @endforeach
                     </div>
-                    <!-- Bar 2: July -->
-                    <div class="d-flex flex-column align-items-center gap-2 flex-grow-1">
-                        <div class="d-flex align-items-end gap-1" style="height: 140px;">
-                            <div class="rounded-top" style="width: 18px; height: 95px; background: #3B82F6;"></div>
-                            <div class="rounded-top" style="width: 18px; height: 60px; background: #10B981;"></div>
-                        </div>
-                        <span class="small text-muted" style="font-size: 0.75rem;">Jul</span>
-                    </div>
-                    <!-- Bar 3: August -->
-                    <div class="d-flex flex-column align-items-center gap-2 flex-grow-1">
-                        <div class="d-flex align-items-end gap-1" style="height: 140px;">
-                            <div class="rounded-top" style="width: 18px; height: 65px; background: #3B82F6;"></div>
-                            <div class="rounded-top" style="width: 18px; height: 80px; background: #10B981;"></div>
-                        </div>
-                        <span class="small text-muted" style="font-size: 0.75rem;">Aug</span>
-                    </div>
-                    <!-- Bar 4: September -->
-                    <div class="d-flex flex-column align-items-center gap-2 flex-grow-1">
-                        <div class="d-flex align-items-end gap-1" style="height: 140px;">
-                            <div class="rounded-top" style="width: 18px; height: 110px; background: #3B82F6;"></div>
-                            <div class="rounded-top" style="width: 18px; height: 90px; background: #10B981;"></div>
-                        </div>
-                        <span class="small text-muted" style="font-size: 0.75rem;">Sep</span>
-                    </div>
-                    <!-- Bar 5: October -->
-                    <div class="d-flex flex-column align-items-center gap-2 flex-grow-1">
-                        <div class="d-flex align-items-end gap-1" style="height: 140px;">
-                            <div class="rounded-top" style="width: 18px; height: 130px; background: #3B82F6;"></div>
-                            <div class="rounded-top" style="width: 18px; height: 115px; background: #10B981;"></div>
-                        </div>
-                        <span class="small text-muted" style="font-size: 0.75rem;">Oct</span>
-                    </div>
-                    <!-- Bar 6: November (Current Live) -->
-                    <div class="d-flex flex-column align-items-center gap-2 flex-grow-1">
-                        <div class="d-flex align-items-end gap-1" style="height: 140px;">
-                            <div class="rounded-top" style="width: 18px; height: 140px; background: #2563EB;"></div>
-                            <div class="rounded-top" style="width: 18px; height: 125px; background: #059669;"></div>
-                        </div>
-                        <span class="small fw-bold text-primary" style="font-size: 0.75rem;">Nov (Current)</span>
-                    </div>
-                </div>
+                @else
+                    <div class="text-center py-4 text-muted small">No traffic recorded yet.</div>
+                @endif
                 <div class="d-flex justify-content-center align-items-center gap-4 mt-3 small text-muted">
                     <div class="d-flex align-items-center gap-1">
                         <span style="width: 10px; height: 10px; background: #2563EB; border-radius: 2px;"></span>
-                        <span>Catalog Additions</span>
+                        <span>Page Views</span>
                     </div>
                     <div class="d-flex align-items-center gap-1">
                         <span style="width: 10px; height: 10px; background: #10B981; border-radius: 2px;"></span>
-                        <span>Firmware &amp; Resources</span>
+                        <span>Unique Visitors</span>
                     </div>
                 </div>
             </div>
 
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 small text-muted pt-2 border-top">
-                <span>Real database counts: {{ $metrics['total_devices'] }} Devices &bull; {{ $metrics['total_firmware'] }} Firmware &bull; {{ $metrics['total_posts'] }} Articles</span>
-                <span class="text-primary fw-medium"><i class="bi bi-info-circle me-1"></i> Live analytics activation arriving in Step 2</span>
+                <span>Today: <strong>{{ number_format($liveStats['today_visitors'] ?? 1) }}</strong> Visitors &bull; Month: <strong>{{ number_format($liveStats['monthly_visitors'] ?? 1) }}</strong> Unique &bull; Total: <strong>{{ number_format($liveStats['total_visitors'] ?? 1) }}</strong></span>
+                <a href="{{ route('admin.analytics.visitors') }}" class="text-primary fw-medium text-decoration-none">
+                    <i class="bi bi-graph-up me-1"></i> Open Visitor Analytics
+                </a>
             </div>
         </div>
 

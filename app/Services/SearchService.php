@@ -265,6 +265,7 @@ class SearchService
         $trimmed = trim($query);
         if (mb_strlen($trimmed) < 2) {
             return [
+                'brands' => [],
                 'devices' => [],
                 'firmware' => [],
                 'flash_files' => [],
@@ -278,6 +279,7 @@ class SearchService
         $tokens = $this->indexingService->tokenize($trimmed);
 
         $results = [
+            'brands' => [],
             'devices' => [],
             'firmware' => [],
             'flash_files' => [],
@@ -315,6 +317,11 @@ class SearchService
             ];
 
             switch ($doc->content_type) {
+                case 'brand':
+                    if (count($results['brands']) < $limit) {
+                        $results['brands'][] = $item;
+                    }
+                    break;
                 case 'device':
                     if (count($results['devices']) < $limit) {
                         $results['devices'][] = $item;

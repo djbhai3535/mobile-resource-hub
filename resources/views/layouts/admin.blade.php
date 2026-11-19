@@ -59,6 +59,10 @@
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span class="sidebar-hide-collapsed">Dashboard</span>
             </a>
+            <a href="{{ route('admin.analytics.visitors') }}" class="admin-nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}" title="Visitor Analytics">
+                <i class="bi bi-graph-up"></i>
+                <span class="sidebar-hide-collapsed">Visitor Analytics</span>
+            </a>
 
             <!-- Group B: Mobile Management -->
             <div class="admin-nav-group-title sidebar-hide-collapsed">Mobile Management</div>

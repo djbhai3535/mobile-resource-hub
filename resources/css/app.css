@@ -1050,3 +1050,383 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
   }
 }
+
+/* ==========================================================================
+   3D Animated Smartphone Showcase Component & Hero Visitor Stats
+   ========================================================================== */
+.hero-visitor-stats-bar {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 9999px;
+  padding: 0.55rem 1.25rem;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+  font-size: 0.82rem;
+  transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] .hero-visitor-stats-bar {
+  background: rgba(20, 30, 48, 0.85);
+  border-color: rgba(38, 52, 73, 0.8);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.25);
+}
+
+.hero-stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+[data-bs-theme="dark"] .hero-stat-item {
+  color: #94A3B8;
+}
+
+.hero-stat-value {
+  font-weight: 700;
+  color: #0F172A;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s ease;
+}
+
+[data-bs-theme="dark"] .hero-stat-value {
+  color: #F8FAFC;
+}
+
+.beacon-pulse {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10B981;
+}
+
+.beacon-pulse::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(16, 185, 129, 0.45);
+  animation: beaconWave 1.8s infinite ease-out;
+}
+
+@keyframes beaconWave {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* 3D Smartphone Stage */
+.smartphone-3d-container {
+  width: 100%;
+  min-height: 400px;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.smartphone-showcase-stage {
+  position: relative;
+  width: 310px;
+  height: 380px;
+  transform-style: preserve-3d;
+}
+
+.phone-3d-wrapper {
+  position: absolute;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.phone-primary {
+  left: 20px;
+  top: 10px;
+  z-index: 2;
+  animation: smartphoneFloat 6s ease-in-out infinite;
+}
+
+.phone-secondary {
+  left: 130px;
+  top: 45px;
+  z-index: 1;
+  animation: smartphoneFloatSecondary 7s ease-in-out infinite;
+}
+
+@keyframes smartphoneFloat {
+  0%, 100% {
+    transform: translateY(0px) rotateY(-8deg) rotateX(4deg);
+  }
+  50% {
+    transform: translateY(-14px) rotateY(4deg) rotateX(-2deg);
+  }
+}
+
+@keyframes smartphoneFloatSecondary {
+  0%, 100% {
+    transform: translateY(0px) rotateY(22deg) rotateX(8deg) rotateZ(-4deg);
+  }
+  50% {
+    transform: translateY(-10px) rotateY(14deg) rotateX(2deg) rotateZ(-2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-primary, .phone-secondary, .beacon-pulse::after {
+    animation: none !important;
+  }
+}
+
+/* Phone Body Construction */
+.phone-3d-body {
+  position: relative;
+  width: 185px;
+  height: 370px;
+  background: #090D16;
+  border-radius: 36px;
+  padding: 10px;
+  box-shadow: 
+    0 0 0 2px #475569,
+    0 0 0 4px #1E293B,
+    0 20px 45px -10px rgba(0, 0, 0, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rear-body {
+  background: linear-gradient(145deg, #1E293B 0%, #0F172A 100%);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: 
+    0 0 0 2px #334155,
+    0 15px 35px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.phone-screen-glare {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 55%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 14px;
+  background: #000000;
+  border-radius: 10px;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.camera-lens {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1E293B;
+  box-shadow: inset 0 0 2px #38BDF8;
+}
+
+.speaker-grill {
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  background: #334155;
+}
+
+.phone-screen-display {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #0F172A 0%, #1E1B4B 60%, #312E81 100%);
+  border-radius: 28px;
+  padding: 24px 12px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.screen-brand-widget {
+  text-align: center;
+  margin: auto 0;
+  padding: 10px 0;
+}
+
+.brand-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+  margin: 0 auto 8px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+.brand-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brand-subtitle {
+  font-size: 0.65rem;
+  color: #94A3B8;
+}
+
+.screen-card-row {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.screen-mini-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 6px 4px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Secondary Phone Quad Camera Island */
+.camera-island-3d {
+  width: 78px;
+  height: 82px;
+  background: #0B1220;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 10px;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 6px;
+  padding: 8px;
+  position: relative;
+}
+
+.camera-lens-ring {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #1E293B;
+  border: 2px solid #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lens-glass {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #0284C7 0%, #030712 70%);
+  box-shadow: inset 0 0 2px #38BDF8;
+}
+
+.camera-flash {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FEF08A;
+  box-shadow: 0 0 6px #FDE047;
+  position: absolute;
+  top: 14px;
+  right: 12px;
+}
+
+.camera-lidar {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #020617;
+  border: 1px solid #475569;
+  position: absolute;
+  bottom: 14px;
+  right: 13px;
+}
+
+.rear-brand-mark {
+  margin: auto auto 30px auto;
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.phone-3d-shadow {
+  position: absolute;
+  bottom: -20px;
+  left: 20px;
+  width: 145px;
+  height: 16px;
+  background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0) 70%);
+  border-radius: 50%;
+  filter: blur(4px);
+  pointer-events: none;
+  animation: shadowPulse 6s ease-in-out infinite;
+}
+
+.shadow-secondary {
+  left: 120px;
+  bottom: -15px;
+  width: 130px;
+  animation: shadowPulse 7s ease-in-out infinite;
+}
+
+@keyframes shadowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.2;
+  }
+}
+
