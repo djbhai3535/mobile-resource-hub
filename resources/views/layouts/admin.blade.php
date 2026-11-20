@@ -162,6 +162,10 @@
                 <i class="bi bi-ui-checks-grid"></i>
                 <span class="sidebar-hide-collapsed">Homepage Sections</span>
             </a>
+            <a href="{{ route('admin.showcase.index') }}" class="admin-nav-link {{ request()->routeIs('admin.showcase.*') ? 'active' : '' }}" title="3D Mobile Showcase Videos">
+                <i class="bi bi-badge-3d text-primary"></i>
+                <span class="sidebar-hide-collapsed">3D Mobile Showcase</span>
+            </a>
             <a href="{{ route('admin.advertisements.index') }}" class="admin-nav-link {{ request()->routeIs('admin.advertisements.index', 'admin.advertisements.edit') ? 'active' : '' }}" title="Advertisements">
                 <i class="bi bi-badge-ad"></i>
                 <span class="sidebar-hide-collapsed">Advertisements</span>

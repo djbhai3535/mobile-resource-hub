@@ -164,6 +164,15 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/search-analytics', [SearchAnalyticsController::class, 'index'])->name('search-analytics.index');
     Route::post('/search-analytics/rebuild', [SearchAnalyticsController::class, 'rebuild'])->name('search-analytics.rebuild');
 
+    // 3D Mobile Showcase
+    Route::get('/showcase', [\App\Http\Controllers\Admin\ShowcaseController::class, 'index'])->name('showcase.index');
+    Route::get('/showcase/create', [\App\Http\Controllers\Admin\ShowcaseController::class, 'create'])->name('showcase.create');
+    Route::post('/showcase', [\App\Http\Controllers\Admin\ShowcaseController::class, 'store'])->name('showcase.store');
+    Route::get('/showcase/{showcase}/edit', [\App\Http\Controllers\Admin\ShowcaseController::class, 'edit'])->name('showcase.edit');
+    Route::put('/showcase/{showcase}', [\App\Http\Controllers\Admin\ShowcaseController::class, 'update'])->name('showcase.update');
+    Route::delete('/showcase/{showcase}', [\App\Http\Controllers\Admin\ShowcaseController::class, 'destroy'])->name('showcase.destroy');
+    Route::post('/showcase/{showcase}/toggle', [\App\Http\Controllers\Admin\ShowcaseController::class, 'toggle'])->name('showcase.toggle');
+
     // Theme Customizer & Design Studio
     Route::get('/theme', [ThemeController::class, 'index'])->name('theme.index');
     Route::get('/theme/preview', [ThemeController::class, 'preview'])->name('theme.preview');

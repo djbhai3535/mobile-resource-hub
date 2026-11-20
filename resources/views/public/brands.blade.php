@@ -32,15 +32,9 @@
         <div class="col-12 col-md-6 col-lg-4 brand-item" data-name="{{ strtolower($brand['name']) }}">
             <div class="mrh-card mrh-brand-card p-4 h-100 d-flex flex-column" style="--brand-color: {{ $meta['color'] }}; --brand-bg: {{ $meta['bg'] }}; --brand-border: {{ $meta['border'] }};">
                 <div class="d-flex align-items-center gap-3 mb-3">
-                    @if(!empty($brand['logo']))
-                        <div class="p-1 rounded border d-flex align-items-center justify-content-center shadow-sm" style="width: 52px; height: 52px; background: {{ $meta['bg'] }}; border-color: {{ $meta['border'] }} !important;">
-                            <img src="{{ $brand['logo'] }}" alt="{{ $brand['name'] }}" style="max-width: 100%; max-height: 100%; object-fit: contain;" loading="lazy">
-                        </div>
-                    @else
-                        <div class="brand-icon-box" style="width: 52px; height: 52px; background: {{ $meta['bg'] }}; border-color: {{ $meta['border'] }}; color: {{ $meta['color'] }};">
-                            <i class="bi bi-phone" style="font-size: 1.4rem;"></i>
-                        </div>
-                    @endif
+                    <div class="p-1 rounded border d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 56px; height: 56px; background: {{ $meta['bg'] }}; border-color: {{ $meta['border'] }} !important;">
+                        <x-brand-logo :slug="$brand['slug']" :name="$brand['name']" :logo="$brand['logo'] ?? null" :size="32" />
+                    </div>
                     <div>
                         <h5 class="fw-bold mb-0">
                             <a href="{{ url('/brands/' . $brand['slug']) }}" class="text-body text-decoration-none brand-title-text">

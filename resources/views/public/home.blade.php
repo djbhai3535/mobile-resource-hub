@@ -4,6 +4,11 @@
 @section('meta_description', 'Search and discover verified mobile phone specifications, official firmware downloads, flash files, USB drivers, and step-by-step repair guides.')
 
 @section('content')
+<!-- Admin-Managed 3D Mobile Showcase (Hidden if no videos active) -->
+@if(isset($showcaseItems) && $showcaseItems->isNotEmpty())
+    <x-showcase-carousel :items="$showcaseItems" />
+@endif
+
 <!-- Hero Section with Prominent Global Search, Live Analytics & 3D Smartphone Showcase (PUB-001, PUB-002) -->
 <section class="py-5 py-lg-6 position-relative overflow-hidden">
     <div class="container-xl">
@@ -184,12 +189,8 @@
             @endphp
             <div class="col-6 col-md-4 col-lg-2">
                 <a href="{{ url('/brands/' . $brand['slug']) }}" class="mrh-card mrh-brand-card p-3 text-center text-decoration-none h-100 d-flex flex-column justify-content-center" style="--brand-color: {{ $meta['color'] }}; --brand-bg: {{ $meta['bg'] }}; --brand-border: {{ $meta['border'] }};">
-                    <div class="brand-icon-box mx-auto mb-2" style="width: 48px; height: 48px; background: {{ $meta['bg'] }}; color: {{ $meta['color'] }}; border: 1px solid {{ $meta['border'] }};">
-                        @if(!empty($brand['logo']))
-                            <img src="{{ $brand['logo'] }}" alt="{{ $brand['name'] }}" style="max-width: 28px; max-height: 28px; object-fit: contain;">
-                        @else
-                            <i class="bi {{ $brand['icon'] }}" style="font-size: 1.35rem;"></i>
-                        @endif
+                    <div class="brand-icon-box mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; background: {{ $meta['bg'] }}; color: {{ $meta['color'] }}; border: 1px solid {{ $meta['border'] }};">
+                        <x-brand-logo :slug="$brand['slug']" :name="$brand['name']" :logo="$brand['logo'] ?? null" :size="30" />
                     </div>
                     <h6 class="fw-bold mb-1 text-body brand-title-text">{{ $brand['name'] }}</h6>
                     <span class="small text-muted">{{ $brand['count'] }} Devices</span>

@@ -20,15 +20,9 @@
     @endphp
     <div class="mrh-card p-4 mb-4 position-relative overflow-hidden" style="border-left: 4px solid {{ $meta['color'] }};">
         <div class="d-flex flex-wrap align-items-center gap-4">
-            @if(isset($brand) && $brand->logo)
-                <div class="p-2 bg-white rounded border d-flex align-items-center justify-content-center shadow-sm" style="width: 80px; height: 80px; border-color: {{ $meta['border'] }} !important;">
-                    <img src="{{ $brand->logo_url }}" alt="{{ $brandName }}" style="max-width: 100%; max-height: 100%; object-fit: contain;" loading="lazy">
-                </div>
-            @else
-                <div class="brand-icon-box" style="width: 72px; height: 72px; font-size: 2.5rem; background: {{ $meta['bg'] }}; border: 1px solid {{ $meta['border'] }}; color: {{ $meta['color'] }};">
-                    <i class="bi bi-phone"></i>
-                </div>
-            @endif
+            <div class="p-2 rounded border d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 80px; height: 80px; background: {{ $meta['bg'] }}; border-color: {{ $meta['border'] }} !important;">
+                <x-brand-logo :slug="$brandSlug" :name="$brandName" :logo="isset($brand) && $brand->logo ? $brand->logo_url : null" :size="48" />
+            </div>
             <div class="flex-grow-1">
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <h1 class="h2 fw-bold mb-0">{{ $brandName }} Smartphones & Resources</h1>

@@ -497,15 +497,169 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
+   3D Mobile Showcase Carousel Section
+   ========================================================================== */
+.showcase-3d-section {
+  background: radial-gradient(circle at 50% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+}
+
+.showcase-carousel-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.showcase-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-glass, rgba(255, 255, 255, 0.85));
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.showcase-nav-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.showcase-track-container {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.45), 0 0 24px rgba(37, 99, 235, 0.15) !important;
+  position: relative;
+  min-height: 260px;
+}
+
+.showcase-slides-track {
+  position: relative;
+  width: 100%;
+}
+
+.showcase-slide {
+  display: none;
+  width: 100%;
+  animation: showcaseFadeIn 0.45s ease-in-out forwards;
+}
+
+.showcase-slide.active {
+  display: block;
+}
+
+@keyframes showcaseFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.showcase-media-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  max-height: 440px;
+  min-height: 260px;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .showcase-media-frame {
+    aspect-ratio: 16 / 9;
+    min-height: 210px;
+  }
+}
+
+.showcase-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.showcase-info-scrim {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.82) 75%);
+  pointer-events: none;
+}
+
+.showcase-frame-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 40%, rgba(255, 255, 255, 0.02) 100%);
+  pointer-events: none;
+}
+
+.showcase-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: var(--border-subtle);
+  transition: all 0.25s ease-in-out;
+  padding: 0;
+  cursor: pointer;
+}
+
+.showcase-dot.active {
+  width: 28px;
+  border-radius: 10px;
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-slide {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
    Colorful Premium Tech Website Design Tokens & Action Buttons
    ========================================================================== */
 .tech-pill {
-  transition: all 0.2s ease-in-out;
-  font-weight: 500;
-  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  border-radius: 50px !important;
+  border: 1px solid transparent !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+.tech-pill i {
+  font-size: 0.88rem;
+  transition: transform 0.2s ease-in-out;
 }
 .tech-pill:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+}
+.tech-pill:hover i {
+  transform: scale(1.15);
 }
 .tech-pill-samsung {
   background: rgba(12, 77, 162, 0.08) !important;
@@ -514,7 +668,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tech-pill-samsung:hover {
   background: rgba(12, 77, 162, 0.16) !important;
-  box-shadow: 0 3px 10px rgba(12, 77, 162, 0.15);
+  box-shadow: 0 4px 12px rgba(12, 77, 162, 0.2);
 }
 .tech-pill-cyan {
   background: rgba(0, 129, 201, 0.08) !important;
@@ -523,7 +677,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tech-pill-cyan:hover {
   background: rgba(0, 129, 201, 0.16) !important;
-  box-shadow: 0 3px 10px rgba(0, 129, 201, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 129, 201, 0.2);
 }
 .tech-pill-amber {
   background: rgba(217, 119, 6, 0.08) !important;
@@ -532,7 +686,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tech-pill-amber:hover {
   background: rgba(217, 119, 6, 0.16) !important;
-  box-shadow: 0 3px 10px rgba(217, 119, 6, 0.15);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
 }
 .tech-pill-violet {
   background: rgba(124, 58, 237, 0.08) !important;
@@ -541,7 +695,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tech-pill-violet:hover {
   background: rgba(124, 58, 237, 0.16) !important;
-  box-shadow: 0 3px 10px rgba(124, 58, 237, 0.15);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
 }
 .tech-pill-xiaomi {
   background: rgba(255, 103, 0, 0.08) !important;
@@ -550,7 +704,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tech-pill-xiaomi:hover {
   background: rgba(255, 103, 0, 0.16) !important;
-  box-shadow: 0 3px 10px rgba(255, 103, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(255, 103, 0, 0.2);
 }
 .tech-pill-emerald {
   background: rgba(5, 150, 105, 0.08) !important;

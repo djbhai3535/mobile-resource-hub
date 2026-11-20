@@ -138,7 +138,13 @@ class PublicPageController extends Controller
 
         $liveStats = app(\App\Services\VisitorAnalyticsService::class)->getLiveStats();
 
-        return view('public.home', compact('popularBrands', 'latestDevices', 'recentFirmware', 'latestGuides', 'sections', 'liveStats'));
+        try {
+            $showcaseItems = \App\Models\ShowcaseItem::active()->ordered()->get();
+        } catch (\Throwable $e) {
+            $showcaseItems = collect([]);
+        }
+
+        return view('public.home', compact('popularBrands', 'latestDevices', 'recentFirmware', 'latestGuides', 'sections', 'liveStats', 'showcaseItems'));
     }
 
     /**
