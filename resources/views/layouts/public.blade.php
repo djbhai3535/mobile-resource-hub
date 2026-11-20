@@ -110,7 +110,7 @@
                 <!-- Mobile Header Right Actions (Search, WhatsApp & Theme Toggle) -->
                 <div class="d-flex align-items-center gap-2 d-lg-none ms-auto me-2">
                     @if($whatsappUrl && $whatsappHeaderEnabled)
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success rounded-circle" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: #25D366; border-color: rgba(37, 211, 102, 0.45);" title="Chat on WhatsApp" aria-label="WhatsApp Support">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-circle" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #2ae771, #1fb854); color: #fff; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);" title="Chat on WhatsApp" aria-label="WhatsApp Support">
                         <i class="bi bi-whatsapp"></i>
                     </a>
                     @endif
@@ -167,7 +167,7 @@
 
                     <!-- Optional Compact Header WhatsApp Link -->
                     @if($whatsappUrl && $whatsappHeaderEnabled)
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success rounded-pill d-inline-flex align-items-center gap-1 px-3 me-2" style="border-color: rgba(37, 211, 102, 0.5); color: #20ba5a; font-weight: 600;" title="Chat with Support on WhatsApp">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-pill d-inline-flex align-items-center gap-1 px-3 me-2" style="background: linear-gradient(145deg, #2ae771, #1fb854); color: #fff; font-weight: 700; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);" title="Chat with Support on WhatsApp">
                         <i class="bi bi-whatsapp"></i>
                         <span class="small">WhatsApp</span>
                     </a>
