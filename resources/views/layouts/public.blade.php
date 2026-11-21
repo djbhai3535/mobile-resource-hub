@@ -95,7 +95,7 @@
     <!-- Sticky Floating Glass Header -->
     <header class="glass-header-wrapper">
         <div class="container-xl">
-            <nav class="navbar navbar-expand-lg glass-navbar" aria-label="Main Navigation">
+            <nav class="navbar navbar-expand-xl glass-navbar" aria-label="Main Navigation">
                 <a class="navbar-brand navbar-brand-logo d-flex align-items-center gap-2" href="{{ url('/') }}">
                     @if($pubLogoUrl)
                         <img src="{{ $pubLogoUrl }}" alt="{{ $pubSiteName }}" style="max-height: {{ $pubLogoHeight }}px; max-width: {{ $pubLogoWidth }}px; width: auto; object-fit: contain;">
@@ -108,7 +108,7 @@
                 </a>
 
                 <!-- Mobile Header Right Actions (Search, WhatsApp & Theme Toggle) -->
-                <div class="d-flex align-items-center gap-2 d-lg-none ms-auto me-2">
+                <div class="d-flex align-items-center gap-2 d-xl-none ms-auto me-2">
                     @if($whatsappUrl && $whatsappHeaderEnabled)
                     <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-circle" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: linear-gradient(145deg, #2ae771, #1fb854); color: #fff; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);" title="Chat on WhatsApp" aria-label="WhatsApp Support">
                         <i class="bi bi-whatsapp"></i>
@@ -128,8 +128,8 @@
                 </button>
 
                 <!-- Desktop Navigation Menu -->
-                <div class="collapse navbar-collapse d-none d-lg-flex" id="desktopNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3 gap-1">
+                <div class="collapse navbar-collapse d-none d-xl-flex" id="desktopNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-2 ms-xxl-3 gap-0 gap-xxl-1">
                         <li class="nav-item">
                             <a class="nav-link {{ request()->is('mobile-phones*') ? 'active' : '' }}" href="{{ url('/mobile-phones') }}">Phones</a>
                         </li>
@@ -157,7 +157,7 @@
                     </ul>
 
                     <!-- Header Quick Search Bar -->
-                    <div class="search-wrapper position-relative me-3" style="width: 260px;">
+                    <div class="search-wrapper position-relative me-2 me-xxl-3" style="width: clamp(140px, 14vw, 220px);">
                         <form action="{{ url('/search') }}" method="GET">
                             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" style="pointer-events: none;"></i>
                             <input type="search" name="q" class="form-control form-control-sm search-input-header mrh-search-input" placeholder="Search devices, ROMs, drivers..." value="{{ request('q') }}" autocomplete="off" aria-label="Global search">
@@ -167,7 +167,7 @@
 
                     <!-- Optional Compact Header WhatsApp Link -->
                     @if($whatsappUrl && $whatsappHeaderEnabled)
-                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-pill d-inline-flex align-items-center gap-1 px-3 me-2" style="background: linear-gradient(145deg, #2ae771, #1fb854); color: #fff; font-weight: 700; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);" title="Chat with Support on WhatsApp">
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1 me-2" style="background: linear-gradient(145deg, #2ae771, #1fb854); color: #fff; font-weight: 700; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35), inset 0 1px 2px rgba(255,255,255,0.6);" title="Chat with Support on WhatsApp">
                         <i class="bi bi-whatsapp"></i>
                         <span class="small">WhatsApp</span>
                     </a>
@@ -384,7 +384,7 @@
         >
             <span class="mrh-whatsapp-pulse" aria-hidden="true"></span>
             <i class="bi bi-whatsapp"></i>
-            <span class="mrh-whatsapp-label">WhatsApp Support</span>
+            <span class="visually-hidden">Chat with Support on WhatsApp</span>
         </a>
     </aside>
     @endif
